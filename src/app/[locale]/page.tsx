@@ -1,10 +1,5 @@
-import { getTranslations } from "next-intl/server"
+import { redirect } from "next/navigation"
 
 export default async function Home() {
-  const t = await getTranslations()
-  return (
-    <>
-      {t("hello")}
-    </>
-  )
+  redirect("/login")
 }
