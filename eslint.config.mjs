@@ -19,18 +19,10 @@ export default defineConfig([
       "out/**",
       "build/**",
       "next-env.d.ts",
+      "**/*.jsx",
+      "**/*.tsx"
     ]
   },
-  {
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts}"],
-    plugins: { js },
-    extends: ["js/recommended"]
-  },
-  { 
-    files: ["**/*.{js,mjs,cjs,ts,mts,cts,tsx,jsx}"],
-    languageOptions: { globals: globals.browser }
-  },
-  tseslint.configs.recommended,
   {
     rules: {
       indent: ["error", 2, {
