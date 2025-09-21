@@ -5,6 +5,7 @@ import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { routing } from "../../i18n/routing.ts"
 import { notFound } from "next/navigation"
 import { getMessages, getTranslations } from "next-intl/server"
+import Header from "../components/global/Header.tsx"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -28,7 +29,7 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
-        {/* <Header params={params} /> */}
+        <Header />
         <NextIntlClientProvider
           messages={messages}
           locale={locale}
