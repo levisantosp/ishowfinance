@@ -1,6 +1,5 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Languages } from "lucide-react"
 import LanguageMenu from "./LanguageMenu.tsx"
 
 export default async function Header() {
@@ -21,7 +20,7 @@ export default async function Header() {
               alt="logo"
             />
             <span
-              className="md:text-4xl font-extrabold"
+              className="text-2xl md:text-4xl font-extrabold"
             >
               ishowfinance
             </span>
