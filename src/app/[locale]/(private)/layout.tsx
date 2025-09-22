@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import "./globals.css"
+import "../globals.css"
 import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { notFound } from "next/navigation"
-import { getMessages, getTranslations } from "next-intl/server"
-import { routing } from "../../i18n/routing.ts"
-import Header from "../components/global/Header.tsx"
-import SessionChecker from "../components/global/SessionChecker.tsx"
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server"
+import { routing } from "../../../i18n/routing.ts"
+import Header from "../../components/private/Header.tsx"
+import SessionChecker from "../../components/global/SessionChecker.tsx"
 
 const inter = Inter({ subsets: ["latin"] })
 
