@@ -1,18 +1,12 @@
 import { hasLocale } from "next-intl"
 import { getRequestConfig } from "next-intl/server"
 import { routing } from "./routing.ts"
-import { readFileSync } from "node:fs"
-import path from "node:path"
+import br from "@/messages/br.json"
+import us from "@/messages/us.json"
 
-const locales: {
-  [key: string]: any
-} = {
-  us: JSON.parse(
-    readFileSync(path.resolve("src/messages/us.json"), "utf-8")
-  ),
-  br: JSON.parse(
-    readFileSync(path.resolve("src/messages/br.json"), "utf-8")
-  )
+const locales = {
+  us,
+  br
 }
 
 export default getRequestConfig(async({ requestLocale }) => {

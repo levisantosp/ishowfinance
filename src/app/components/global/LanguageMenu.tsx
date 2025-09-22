@@ -8,12 +8,16 @@ import { Languages } from "lucide-react"
 
 export default function LanguageMenu() {
   const [isOpen, setIsOpen] = useState(false)
+
   const router = useRouter()
   const path = usePathname()
+
   const changeLanguage = (lang: typeof locales[number]) => {
     const reg = new RegExp(`^/(${locales.join("|")})`)
+    
     router.push(`/${lang}${path.replace(reg, "")}`)
   }
+
   return (
     <>
       <div
