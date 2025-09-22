@@ -10,11 +10,17 @@ type Props = {
 }
 
 export default function LoginMethods({ google, microsoft }: Props) {
-  const login = async(provider: "google" | "microsoft") => {
-    await authClient.signIn.social({
+  const login = (provider: "google" | "microsoft") => {
+    authClient.signIn.social({
       provider,
-      callbackURL: "/dash"
+      callbackURL: "/dash",
+      fetchOptions: {
+        headers: {
+          auth: process.env.NEXT_PUBLIC_AUTH
+        }
+      }
     })
+    .then(res => console.log(res))
   }
 
   return (
