@@ -8,18 +8,73 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  createdAt     DateTime  @default(now())
-  email         String    @unique
-  emailVerified Boolean   @default(false)
+  id            String         @id @default(cuid())
+  createdAt     DateTime       @default(now())
+  email         String         @unique
+  emailVerified Boolean        @default(false)
   name          String
   lastName      String?
   accounts      Account[]
   sessions      Session[]
-  updatedAt     DateTime  @updatedAt
+  updatedAt     DateTime       @updatedAt
   image         String?
+  orgs          Organization[]
+  memberIn      Member[]
+  pendingIn     Pending[]
 
   @@map("user")
+}
+
+model Organization {
+  id        String    @id @default(uuid())
+  name      String
+  prodToken String    @unique @default(cuid())
+  testToken String    @unique @default(cuid())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    String
+  members   Member[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  invite    Invite[]
+  pending   Pending[]
+
+  @@index([userId])
+  @@map("organization")
+}
+
+model Pending {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  @@map("pending")
+  @@index([userId, organizationId])
+}
+
+model Invite {
+  id             String       @id @default(cuid())
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  expiresAt      DateTime
+
+  @@map("invite")
+  @@index([organizationId])
+}
+
+model Member {
+  id             String       @id @default(cuid())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  createdAt      DateTime     @default(now())
+  role           Role         @default(MEMBER)
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId, userId])
+  @@map("member")
 }
 
 model Account {
@@ -47,13 +102,13 @@ model Account {
 }
 
 model Session {
-  id        String    @id @default(cuid())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
-  token     String    @unique
+  token     String   @unique
   expiresAt DateTime
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   ipAddress String?
   userAgent String?
 
@@ -71,4 +126,10 @@ model Verification {
 
   @@unique([identifier, value])
   @@map("verification")
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
 }
