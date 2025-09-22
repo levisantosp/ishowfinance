@@ -20,7 +20,6 @@ export default function LoginMethods({ google, microsoft }: Props) {
         }
       }
     })
-    .then(res => console.log(res))
   }
 
   return (
