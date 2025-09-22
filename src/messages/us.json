@@ -8,11 +8,9 @@
       "title": "Log in to iShowFinance",
       "google": "Continue with Google",
       "microsoft": "Continue with Microsoft"
-    }
-  },
-  "notifications": {
-    "session": {
-      "expired": "Session Expired"
+    },
+    "dash": {
+      "title": "Dashboard"
     }
   }
 }

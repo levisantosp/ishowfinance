@@ -8,11 +8,9 @@
       "title": "Fazer Login na iShowFinance",
       "google": "Continuar com o Google",
       "microsoft": "Continuar com a Microsoft"
-    }
-  },
-  "notifications": {
-    "session": {
-      "expired": "Sessão Expirada"
+    },
+    "dash": {
+      "title": "Painel de Controle"
     }
   }
 }
