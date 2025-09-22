@@ -28,8 +28,7 @@ model User {
 model Organization {
   id        String    @id @default(uuid())
   name      String
-  prodToken String    @unique @default(cuid())
-  testToken String    @unique @default(cuid())
+  tokens    Token[]
   user      User      @relation(fields: [userId], references: [id])
   userId    String
   members   Member[]
@@ -42,15 +41,25 @@ model Organization {
   @@map("organization")
 }
 
+model Token {
+  id             String       @id @default(uuid())
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+  type           TokenType
+
+  @@unique([organizationId, type])
+  @@map("token")
+}
+
 model Pending {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
+  id             String       @id @default(uuid())
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 
-  @@map("pending")
   @@index([userId, organizationId])
+  @@map("pending")
 }
 
 model Invite {
@@ -59,8 +68,8 @@ model Invite {
   organizationId String
   expiresAt      DateTime
 
-  @@map("invite")
   @@index([organizationId])
+  @@map("invite")
 }
 
 model Member {
@@ -132,4 +141,9 @@ enum Role {
   OWNER
   ADMIN
   MEMBER
+}
+
+enum TokenType {
+  TEST
+  PROD
 }
