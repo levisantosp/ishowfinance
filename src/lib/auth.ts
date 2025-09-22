@@ -15,7 +15,10 @@ export const auth = betterAuth({
       clientSecret: process.env.MICROSOFT_CLIENT_SECRET
     }
   },
-  database: prismaAdapter(prisma, { provider: "postgresql" }),
+  database: prismaAdapter(prisma, {
+    provider: "postgresql",
+    transaction: true
+  }),
   emailAndPassword: {
     enabled: false
   },
