@@ -1,6 +1,5 @@
 import { getSessionCookie } from "better-auth/cookies"
 import { NextResponse, type NextRequest } from "next/server"
-import { authClient } from "../auth-client.ts"
 
 const publicRoutes = [
   {
@@ -20,7 +19,7 @@ const getLocale = (req: NextRequest) => {
   return parts.length > 0 ? parts[0] : "us"
 }
 
-export default async function(req: NextRequest) {
+export default function(req: NextRequest) {
   const path = req.nextUrl.pathname
   const publicRoute = publicRoutes.find(route => path.endsWith(route.path))
 

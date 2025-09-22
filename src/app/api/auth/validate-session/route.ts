@@ -16,8 +16,6 @@ export const GET = async(req: NextRequest) => {
       token: sessionToken.split(".")[0]
     }
   })
-
-  console.log(session)
   
   if(!session) {
     return NextResponse.json({

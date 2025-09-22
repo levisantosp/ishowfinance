@@ -1,15 +1,11 @@
 "use client"
 
-import { useParams, useRouter } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { authClient } from "../../../lib/auth-client.ts"
 
 export default function SessionChecker() {
   const router = useRouter()
-
-  const params: {
-    locale: "br" | "us"
-  } = useParams()
 
   useEffect(() => {
     const check = async() => {
@@ -25,7 +21,10 @@ export default function SessionChecker() {
         authClient.signOut({
           fetchOptions: {
             onSuccess() {
-              router.push(`/${params.locale}/login`)
+              router.push("/login")
+            },
+            headers: {
+              auth: process.env.NEXT_PUBLIC_AUTH
             }
           }
         })
@@ -34,7 +33,6 @@ export default function SessionChecker() {
 
     check()
   }, [router])
-
 
   return null
 }
