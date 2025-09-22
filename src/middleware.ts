@@ -10,6 +10,7 @@ const middleware = (req: NextRequest) => {
     ) {
       return NextResponse.next()
     }
+    
     const authorization = req.headers.get("auth")
 
     if(authorization !== process.env.AUTH) {
