@@ -27,8 +27,8 @@ export default function LoginMethods({ google, microsoft }: Props) {
       <button
         onClick={() => login("google")}
         className="
-          flex gap-2 bg-[#2A2A2A] rounded-2xl p-3 cursor-pointer
-          hover:bg-[#3A3A3A] duration-300
+          flex gap-2 border border-gray-500 rounded-2xl p-3 cursor-pointer
+          hover:bg-[#444444] duration-300
           w-80 md:w-100
           items-center justify-center
           "
@@ -45,8 +45,8 @@ export default function LoginMethods({ google, microsoft }: Props) {
       <button
         onClick={() => login("microsoft")}
         className="
-          flex gap-2 bg-[#2A2A2A] rounded-2xl p-3 cursor-pointer
-          hover:bg-[#3A3A3A] duration-300
+          flex gap-2 border border-gray-500 rounded-2xl p-3 cursor-pointer
+          hover:bg-[#444444] duration-300
           w-80 md:w-100
           items-center justify-center
           "

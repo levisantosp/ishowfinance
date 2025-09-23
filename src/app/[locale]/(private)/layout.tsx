@@ -36,11 +36,11 @@ export default async function RootLayout({ children, params }: Props) {
     <html lang={locale}>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <SessionChecker />
-        <Header />
         <NextIntlClientProvider
           messages={messages}
           locale={locale}
         >
+          <Header />
           <main className="flex-grow">
             {children}
           </main>

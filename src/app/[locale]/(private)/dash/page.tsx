@@ -7,7 +7,7 @@ export default async function Login() {
     <>
      <div>
       <h1
-        className="text-center text-3xl font-bold"
+        className="text-center text-3xl md:text-4xl font-bold p-10"
       >
         {t("pages.dash.title")}
       </h1>

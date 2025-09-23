@@ -12,5 +12,11 @@
     "dash": {
       "title": "Dashboard"
     }
+  },
+  "header": {
+    "menu": {
+      "language": "Language: English",
+      "profile": "Your Profile"
+    }
   }
 }

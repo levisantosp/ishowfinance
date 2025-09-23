@@ -12,5 +12,11 @@
     "dash": {
       "title": "Painel de Controle"
     }
+  },
+  "header": {
+    "menu": {
+      "language": "Idioma: Português",
+      "profile": "Seu Perfil"
+    }
   }
 }
