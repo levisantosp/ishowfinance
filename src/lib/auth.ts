@@ -12,7 +12,9 @@ export const auth = betterAuth({
     },
     microsoft: {
       clientId: process.env.MICROSOFT_CLIENT_ID,
-      clientSecret: process.env.MICROSOFT_CLIENT_SECRET
+      clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
+      tenantId: "common",
+      prompt: "select_account"
     }
   },
   database: prismaAdapter(prisma, {
