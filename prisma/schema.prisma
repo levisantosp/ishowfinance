@@ -56,11 +56,12 @@ model Category {
 }
 
 model Transaction {
-  id         String          @id @default(uuid())
-  category   Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId String
-  type       TransactionType
-  amount     BigInt
+  id          String          @id @default(uuid())
+  category    Category        @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+  type        TransactionType
+  amount      BigInt
+  description String?         @db.VarChar(100)
 
   @@index([categoryId, type])
   @@map("transaction")
