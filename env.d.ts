@@ -9,6 +9,7 @@ declare global {
       BASE_URL: string
       AUTH: string
       NEXT_PUBLIC_AUTH: string
+      BETTER_AUTH_SECRET: string
     }
   }
 }
