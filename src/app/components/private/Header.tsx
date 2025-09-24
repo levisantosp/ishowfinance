@@ -27,7 +27,7 @@ export default async function Header() {
           </Link>
         </div>
         <div
-          className="md:px-10 p-4"
+          className="flex md:px-10 p-4 items-center"
         >
           <Menu />
         </div>

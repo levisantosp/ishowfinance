@@ -2,25 +2,26 @@
 
 import { Transition } from "@headlessui/react"
 import * as Lucide from "lucide-react"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 import LanguageMenu from "./LanguageMenu.tsx"
+import Link from "next/link"
 
-type Props = {
-  // messages: {}
-}
-
-export default function Menu({}: Props) {
+export default function Menu() {
   const [isOpen, setIsOpen] = useState(false)
+  const [languageIsOpen, setLanguageIsOpen] = useState(false)
+
+  const t = useTranslations()
 
   return (
     <>
       <div
-        onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
         className="relative inline-block"
       >
         <Lucide.Menu
           className="rounded-lg border border-gray-500 p-1"
           size={30}
+          onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
         />
 
         <Transition
@@ -40,8 +41,43 @@ export default function Menu({}: Props) {
             bg-[#171717]
             "
           >
-            <div>
-              <LanguageMenu />
+            <div
+              className="
+              cursor-pointer
+              transition duration-300 hover:bg-[#444444]
+              rounded-2xl px-4 py-2
+              "
+              onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
+            >
+              <Link
+                href="/profile"
+                className="flex gap-2"
+              >
+                <Lucide.User />
+
+                <span>
+                  {t("header.menu.profile")}
+                </span>
+              </Link>
+            </div>
+
+            <div
+              className="
+              flex gap-2 cursor-pointer
+              transition duration-300 hover:bg-[#444444]
+              rounded-2xl px-4 py-2
+              "
+              onClick={() => languageIsOpen ? setLanguageIsOpen(false) : setLanguageIsOpen(true)}
+            >
+              <Lucide.Languages />
+
+              <span>
+                {t("header.menu.language")}
+              </span>
+
+              <LanguageMenu
+                isOpen={languageIsOpen}
+              />
             </div>
           </div>
         </Transition>

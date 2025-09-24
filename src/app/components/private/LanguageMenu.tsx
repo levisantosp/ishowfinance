@@ -1,38 +1,54 @@
 "use client"
 
-import { Languages, User } from "lucide-react"
-import { useTranslations } from "next-intl"
+import { usePathname, useRouter } from "next/navigation"
+import { locales } from "../../../config.ts"
+import { Transition } from "@headlessui/react"
 
-export default function LanguageMenu() {
-  const t = useTranslations()
+type Props = {
+  isOpen: boolean
+}
+
+export default function LanguageMenu({ isOpen }: Props) {
+  const router = useRouter()
+  const path = usePathname()
+
+  const changeLanguage = (lang: typeof locales[number]) => {
+    const reg = new RegExp(`^/(${locales.join("|")})`)
+    
+    router.push(`/${lang}${path.replace(reg, "")}`)
+  }
 
   return (
     <>
       <div
-        className="
-        flex gap-2 cursor-pointer
-        transition duration-300 hover:bg-[#444444]
-        rounded-2xl px-4 py-2
-        "
+        className="relative inline-block"
       >
-        <User />
-
-        <span>
-          {t("header.menu.profile")}
-        </span>
-      </div>
-      <div
-        className="
-        flex gap-2 cursor-pointer
-        transition duration-300 hover:bg-[#444444]
-        rounded-2xl px-4 py-2
-        "
-      >
-        <Languages />
-
-        <span>
-          {t("header.menu.language")}
-        </span>
+        <Transition
+          show={isOpen}
+          enter="transition-opacity duration-500 ease-out"
+          enterFrom="opacity-0 translate-y-2"
+          enterTo="opacity-100 translate-y-0"
+          leave="transition-opacity duration-250 ease-in"
+          leaveFrom="opacity-100 translate-y-0"
+          leaveTo="opacity-0 translate-y-2"
+        >
+          <div
+            className="flex flex-col gap-1 absolute top-0 right-49 rounded-2xl border border-gray-500 w-40 z-20 bg-[#171717]"
+          >
+            <div
+              className="cursor-pointer hover:bg-[#444444] rounded-2xl transition px-4 py-2"
+              onClick={() => changeLanguage("br")}
+            >
+              <span>Português</span>
+            </div>
+            <div
+              className="cursor-pointer  hover:bg-[#444444] rounded-2xl transition px-4 py-2"
+              onClick={() => changeLanguage("us")}
+            >
+              <span>English</span>
+            </div>
+          </div>
+        </Transition>
       </div>
     </>
   )
