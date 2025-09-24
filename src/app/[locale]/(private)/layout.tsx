@@ -3,10 +3,9 @@ import { Inter } from "next/font/google"
 import "../globals.css"
 import { hasLocale, NextIntlClientProvider } from "next-intl"
 import { notFound } from "next/navigation"
-import { getMessages, getTranslations, setRequestLocale } from "next-intl/server"
+import { getMessages, getTranslations } from "next-intl/server"
 import { routing } from "../../../i18n/routing.ts"
 import Header from "../../components/private/Header.tsx"
-import SessionChecker from "../../components/global/SessionChecker.tsx"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -35,7 +34,6 @@ export default async function RootLayout({ children, params }: Props) {
   return (
     <html lang={locale}>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
-        <SessionChecker />
         <NextIntlClientProvider
           messages={messages}
           locale={locale}
