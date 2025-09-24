@@ -24,5 +24,9 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: false
   },
-  plugins: [nextCookies()]
+  plugins: [nextCookies()],
+  session: {
+    expiresIn: 60 * 60 * 24 * 7,
+    updateAge: 60 * 60 * 24
+  }
 })
