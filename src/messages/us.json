@@ -11,6 +11,12 @@
     },
     "dash": {
       "title": "Dashboard"
+    },
+    "profile": {
+      "title": "Profile",
+      "organizations": "Your Organizations",
+      "welcome": "Welcome to your Profile",
+      "you_dont_have_orgs": "You don't have any organizations yet"
     }
   },
   "header": {

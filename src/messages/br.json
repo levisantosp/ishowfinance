@@ -11,6 +11,12 @@
     },
     "dash": {
       "title": "Painel de Controle"
+    },
+    "profile": {
+      "title": "Perfil",
+      "organizations": "Suas Organizações",
+      "welcome": "Bem-vindo(a) ao seu Perfil",
+      "you_dont_have_orgs": "Você ainda não possui nenhuma organização"
     }
   },
   "header": {
