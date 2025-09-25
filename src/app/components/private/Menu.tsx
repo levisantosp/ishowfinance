@@ -6,10 +6,25 @@ import { useTranslations } from "next-intl"
 import { useState } from "react"
 import LanguageMenu from "./LanguageMenu.tsx"
 import Link from "next/link"
+import { authClient } from "@/lib/auth-client"
+import { useRouter } from "next/navigation"
 
 export default function Menu() {
   const [isOpen, setIsOpen] = useState(false)
   const [languageIsOpen, setLanguageIsOpen] = useState(false)
+
+  const router = useRouter()
+
+  const signOut = () => authClient.signOut({
+    fetchOptions: {
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH
+      },
+      onSuccess() {
+        router.push("/login")
+      }
+    }
+  })
 
   const t = useTranslations()
 
@@ -36,7 +51,7 @@ export default function Menu() {
           <div
             className="
             flex flex-col border border-gray-500
-            absolute top-12 right-0 w-90 z-20
+            absolute top-12 right-0 w-60 z-20
             rounded-2xl
             bg-[#171717]
             "
@@ -78,6 +93,40 @@ export default function Menu() {
               <LanguageMenu
                 isOpen={languageIsOpen}
               />
+            </div>
+
+            <div
+              className="
+              cursor-pointer
+              transition duration-300 hover:bg-[#444444]
+              rounded-2xl px-4 py-2
+              "
+              onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
+            >
+              <Link
+                href="/org/create"
+                className="flex gap-2"
+              >
+                <Lucide.Plus />
+                <span>
+                  {t("header.menu.create_org")}
+                </span>
+              </Link>
+            </div>
+
+            <div
+              className="
+              flex gap-2 cursor-pointer
+              transition duration-300 hover:bg-[#444444]
+              rounded-2xl px-4 py-2
+              "
+              onClick={() => signOut()}
+            >
+              <Lucide.LogOut />
+              
+              <span>
+                {t("header.menu.signout")}
+              </span>
             </div>
           </div>
         </Transition>
