@@ -4,7 +4,6 @@ import { $Enums } from "@prisma/client"
 import { useTranslations } from "next-intl"
 import { useEffect, useState } from "react"
 import { RiErrorWarningLine } from "react-icons/ri"
-import { prisma } from "@/lib/prisma"
 import Link from "next/link"
 
 type Member = {
