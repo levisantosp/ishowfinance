@@ -22,7 +22,9 @@ export const GET = async(req: NextRequest) => {
   const organizations = await prisma.organization.findMany({
     where: { userId },
     include: {
-      members: true
+      members: {
+        where: { userId }
+      }
     }
   })
 
