@@ -16,13 +16,28 @@
       "title": "Profile",
       "organizations": "Your Organizations",
       "welcome": "Welcome to your Profile",
-      "you_dont_have_orgs": "You don't have any organizations yet"
+      "you_dont_have_orgs": "You don't have any organizations yet",
+      "role": {
+        "OWNER": "Owner",
+        "ADMIN": "Administrator",
+        "MEMBER": "Member"
+      }
+    },
+    "org": {
+      "create": {
+        "title": "Create an Organization",
+        "name": "Organization name",
+        "email": "Contact email",
+        "submit": "Create"
+      }
     }
   },
   "header": {
     "menu": {
       "language": "Language: English",
-      "profile": "Your Profile"
+      "profile": "Your Profile",
+      "create_org": "Create Organization",
+      "signout": "Sign Out"
     }
   }
 }
