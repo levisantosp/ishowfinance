@@ -1,12 +1,7 @@
 import { getTranslations } from "next-intl/server"
-import { prisma } from "@/lib/prisma"
 import CreateOrgForm from "@/app/components/private/CreateOrgForm"
 
-type Props = {
-  searchParams: Promise<Record<string, string>>
-}
-
-export default async function CreateOrg({ searchParams }: Props) {
+export default async function CreateOrg() {
   const t = await getTranslations()
 
   return (
