@@ -3,9 +3,8 @@ import { headers } from "next/headers"
 import Image from "next/image"
 import { authClient } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
-import { prisma } from "@/lib/prisma"
 import { getTranslations } from "next-intl/server"
-import { RiErrorWarningLine } from "react-icons/ri"
+import Org from "@/app/components/private/Org"
 
 export default async function Profile() {
   const session = await auth.api.getSession({
@@ -26,12 +25,6 @@ export default async function Profile() {
 
     return null
   }
-
-  const organizations = await prisma.organization.findMany({
-    where: {
-      userId: session.user.id
-    }
-  })
 
   const t = await getTranslations()
 
@@ -80,36 +73,14 @@ export default async function Profile() {
           </div>
 
           <h2
-            className="font-semibold text-2xl py-10"
+            className="font-semibold text-2xl pt-10 text-center"
           >
             {t("pages.profile.organizations")}
           </h2>
 
-          <div>
-            {organizations.length > 0 && organizations.map(org => (
-              <div
-                key={org.id}
-              >
-                {org.name}
-              </div>
-            ))}
-          </div>
-          <div>
-            {organizations.length < 1 && (
-              <div
-                className="flex gap-1"
-              >
-                <RiErrorWarningLine
-                  color="#f87171"
-                />
-                <span
-                  className="text-xs text-red-400"
-                >
-                  {t("pages.profile.you_dont_have_orgs")}
-                </span>
-              </div>
-            )}
-          </div>
+          <Org
+            userId={session.user.id}
+          />
         </div>
       </div>
     </>
