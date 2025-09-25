@@ -20,7 +20,6 @@ export default defineConfig([
       "build/**",
       "next-env.d.ts",
       "**/*.jsx",
-      "**/*.tsx"
     ]
   },
   {
@@ -47,8 +46,8 @@ export default defineConfig([
       }],
       "@typescript-eslint/no-explicit-any": "off",
       "no-empty": "off",
-      "@typescript-eslint/no-unused-expressions": "off",
-      "import/no-anonymous-default-export": "off"
+      "import/no-anonymous-default-export": "off",
+      "react-hooks/exhaustive-deps": "off"
     }
   }
 ])
