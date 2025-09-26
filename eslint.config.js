@@ -1,7 +1,11 @@
-import { dirname } from "path"
-import { fileURLToPath } from "url"
-import { FlatCompat } from "@eslint/eslintrc"
+import js from "@eslint/js"
+import globals from "globals"
+import tseslint from "typescript-eslint"
+import pluginReact from "eslint-plugin-react"
 import { defineConfig } from "eslint/config"
+import { dirname } from "node:path"
+import { fileURLToPath } from "node:url"
+import { FlatCompat } from "@eslint/eslintrc"
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -18,10 +22,17 @@ export default defineConfig([
       ".next/**",
       "out/**",
       "build/**",
-      "next-env.d.ts",
-      "**/*.jsx",
+      "next-env.d.ts"
     ]
   },
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    plugins: { js },
+    extends: ["js/recommended"],
+    languageOptions: { globals: globals.browser }
+  },
+  tseslint.configs.recommended,
+  pluginReact.configs.flat.recommended,
   {
     rules: {
       indent: ["error", 2, {
