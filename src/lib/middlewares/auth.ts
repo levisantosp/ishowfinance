@@ -16,7 +16,7 @@ const getLocale = (req: NextRequest) => {
   const path = req.nextUrl.pathname
   const parts = path.split("/").filter(p => p.length)
 
-  return parts.length > 0 ? parts[0] : "us"
+  return parts.length > 0 ? parts[0] : "en-US"
 }
 
 export default function(req: NextRequest) {

@@ -29,6 +29,9 @@
         "name": "Organization name",
         "email": "Contact email",
         "submit": "Create"
+      },
+      "overview": {
+        "balance": "Balance"
       }
     }
   },

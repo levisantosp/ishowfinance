@@ -37,13 +37,13 @@ export default function LanguageMenu({ isOpen }: Props) {
           >
             <div
               className="cursor-pointer hover:bg-[#444444] rounded-2xl transition px-4 py-2"
-              onClick={() => changeLanguage("br")}
+              onClick={() => changeLanguage("pt-BR")}
             >
               <span>Português</span>
             </div>
             <div
               className="cursor-pointer  hover:bg-[#444444] rounded-2xl transition px-4 py-2"
-              onClick={() => changeLanguage("us")}
+              onClick={() => changeLanguage("en-US")}
             >
               <span>English</span>
             </div>

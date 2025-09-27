@@ -3,5 +3,5 @@ import { locales } from "../config.ts"
 
 export const routing = defineRouting({
   locales,
-  defaultLocale: "us"
+  defaultLocale: "en-US"
 })
