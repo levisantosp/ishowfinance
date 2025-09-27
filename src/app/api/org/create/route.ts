@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { getSessionCookie } from "better-auth/cookies"
+import { auth } from "@/lib/auth"
 
 export const POST = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
@@ -16,14 +17,7 @@ export const POST = async(req: NextRequest) => {
     name: string
   } = await req.json()
 
-  const session = await prisma.session.findFirst({
-    where: {
-      token: sessionCookie.split(".")[0]
-    },
-    include: {
-      user: true
-    }
-  })
+  const session = await auth.api.getSession({ headers: req.headers })
 
   if(!session) {
     return NextResponse.json({
@@ -35,10 +29,10 @@ export const POST = async(req: NextRequest) => {
     data: {
       name: data.name,
       email: data.email,
-      userId: session.userId,
+      userId: session.user.id,
       members: {
         create: {
-          userId: session.userId,
+          userId: session.user.id,
           role: "OWNER"
         }
       }
