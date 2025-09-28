@@ -43,3 +43,35 @@ export const POST = async(req: NextRequest) => {
     redirectTo: `/org/${org.id}/overview`
   })
 }
+
+export const GET = async(req: NextRequest) => {
+  const sessionCookie = getSessionCookie(req)
+
+  if(!sessionCookie) {
+    return NextResponse.json({
+      error: "You must to be logged in"
+    })
+  }
+
+  const userId = req.headers.get("userId")
+
+  if(!userId) {
+    return NextResponse.json({
+      error: "User ID must be provided"
+    })
+  }
+
+  const organizations = await prisma.organization.findMany({
+    where: { userId },
+    include: {
+      members: {
+        where: { userId }
+      }
+    },
+    omit: {
+      balance: true
+    }
+  })
+
+  return NextResponse.json({ organizations })
+}

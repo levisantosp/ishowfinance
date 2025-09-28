@@ -28,7 +28,7 @@ export default function CreateOrgForm() {
     const res: {
       redirectTo?: string
       error?: string
-    } = await (await fetch("/api/org/create", {
+    } = await (await fetch("/api/org", {
       method: "post",
       headers: {
         auth: process.env.NEXT_PUBLIC_AUTH

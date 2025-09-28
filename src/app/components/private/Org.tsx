@@ -38,7 +38,7 @@ export default function Org({ userId }: Props) {
     const findOrganizations = async() => {
       const res: {
         organizations: Org[]
-      } = await (await fetch("/api/org/find", {
+      } = await (await fetch("/api/org", {
         headers: {
           auth: process.env.NEXT_PUBLIC_AUTH,
           userId
