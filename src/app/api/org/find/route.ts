@@ -25,6 +25,9 @@ export const GET = async(req: NextRequest) => {
       members: {
         where: { userId }
       }
+    },
+    omit: {
+      balance: true
     }
   })
 
