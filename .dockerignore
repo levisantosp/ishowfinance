@@ -1,0 +1,6 @@
+*test*
+.next
+node_modules
+README.md
+LICENSE
+.gitignore
