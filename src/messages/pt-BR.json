@@ -29,7 +29,14 @@
         "name": "Nome da organização",
         "email": "Email para contato",
         "submit": "Criar"
-      }
+      },
+      "overview": {
+        "balance": "Saldo",
+        "summary": {
+          "title": "Resumo Financeiro",
+          "description": "A empresa ganhou {income} e gastou {expense} nos últimos 30 dias"
+        }
+      }      
     }
   },
   "header": {

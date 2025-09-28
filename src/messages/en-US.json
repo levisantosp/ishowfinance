@@ -31,7 +31,11 @@
         "submit": "Create"
       },
       "overview": {
-        "balance": "Balance"
+        "balance": "Balance",
+        "summary": {
+          "title": "Financial Summary",
+          "description": "The company earned {income} and spent {expense} in the last 30 days"
+        }
       }
     }
   },
