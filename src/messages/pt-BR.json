@@ -36,7 +36,13 @@
           "title": "Resumo Financeiro",
           "description": "A empresa ganhou {income} e gastou {expense} nos últimos 30 dias"
         }
-      }      
+      },
+      "members": {
+        "title": "Membros"
+      },
+      "menu": {
+        "members": "Membros"
+      }
     }
   },
   "header": {
@@ -46,5 +52,8 @@
       "create_org": "Criar Organização",
       "signout": "Sair"
     }
+  },
+  "utils": {
+    "loading": "Carregando informações"
   }
 }

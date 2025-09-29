@@ -36,6 +36,12 @@
           "title": "Financial Summary",
           "description": "The company earned {income} and spent {expense} in the last 30 days"
         }
+      },
+      "members": {
+        "title": "Members"
+      },
+      "menu": {
+        "members": "Members"
       }
     }
   },
@@ -46,5 +52,8 @@
       "create_org": "Create Organization",
       "signout": "Sign Out"
     }
+  },
+  "utils": {
+    "loading": "Loading information"
   }
 }
