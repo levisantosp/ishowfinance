@@ -4,7 +4,7 @@ import Image from "next/image"
 import { authClient } from "@/lib/auth-client"
 import { redirect } from "next/navigation"
 import { getTranslations } from "next-intl/server"
-import Org from "@/app/components/private/Org"
+import Org from "@/app/components/private/org/Org"
 
 export default async function Profile() {
   const session = await auth.api.getSession({
