@@ -66,7 +66,7 @@ export default function CreateOrgForm() {
         />
 
         <input
-          type="text"
+          type="email"
           placeholder={t("pages.org.create.email")}
           className="w-full rounded-2xl border border-gray-500 pl-4 py-2"
           name="email"
