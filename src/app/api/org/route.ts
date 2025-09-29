@@ -53,25 +53,42 @@ export const GET = async(req: NextRequest) => {
     })
   }
 
-  const userId = req.headers.get("userId")
+  const queryOptions = req.headers.get("queryOptions")
+  const method = req.headers.get("find")
 
-  if(!userId) {
+  if(!method) {
     return NextResponse.json({
-      error: "User ID must be provided"
+      error: "'method' must be provided"
     })
   }
 
-  const organizations = await prisma.organization.findMany({
-    where: { userId },
-    include: {
-      members: {
-        where: { userId }
-      }
-    },
-    omit: {
-      balance: true
-    }
-  })
+  if(!queryOptions) {
+    return NextResponse.json({
+      error: "'queryOptions' must be provided"
+    })
+  }
 
-  return NextResponse.json({ organizations })
+  const parsedQueryOptions = JSON.parse(queryOptions)
+
+  switch(method) {
+    case "many": {
+      const organizations = await prisma.organization.findMany(parsedQueryOptions)
+
+      return NextResponse.json({ organizations })
+    }
+    
+    case "unique": {
+      const organization = await prisma.organization.findUnique(parsedQueryOptions)
+
+      return NextResponse.json({
+        organization: !organization ? null :
+          {
+            ...organization,
+            balance: organization.balance.toString()
+          }
+      })
+    }
+
+    default: return NextResponse.json({ error: "'method' value must be 'unique' or 'many'" })
+  }
 }
