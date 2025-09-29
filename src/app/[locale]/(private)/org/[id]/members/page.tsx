@@ -1,5 +1,10 @@
 import { prisma } from "@/lib/prisma"
+import { getTranslations } from "next-intl/server"
+import Image from "next/image"
 import { notFound } from "next/navigation"
+import { auth } from "@/lib/auth"
+import { headers } from "next/headers"
+import MembersOverview from "../../../../../components/private/org/MembersOverview.tsx"
 
 type Props = {
   params: Promise<{
@@ -10,28 +15,22 @@ type Props = {
 export default async function Members({ params }: Props) {
   const { id } = await params
 
-  const org = await prisma.organization.findUnique({
-    where: { id },
-    include: {
-      members: {
-        include: {
-          user: true
-        }
-      }
+  const session = await auth.api.getSession({ headers: await headers() })
+
+  const member = await prisma.member.findFirst({
+    where: {
+      userId: session?.user.id,
+      organizationId: id
     }
   })
 
-  if(!org) {
+  if(!member) {
     notFound()
   }
 
   return (
     <>
-      {org.members.map(member => (
-        <div>
-          {member.user.name}
-        </div>
-      ))}
+      <MembersOverview id={id} />
     </>
   )
 }
