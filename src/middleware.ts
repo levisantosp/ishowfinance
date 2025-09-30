@@ -3,8 +3,8 @@ import auth from './lib/middlewares/auth.ts'
 import intl from './lib/middlewares/intl.ts'
 
 const middleware = (req: NextRequest) => {
-  if (req.nextUrl.pathname.startsWith('/api')) {
-    if (
+  if(req.nextUrl.pathname.startsWith('/api')) {
+    if(
       req.nextUrl.pathname.startsWith('/api/auth/callback/google') ||
       req.nextUrl.pathname.startsWith('/api/auth/callback/microsoft')
     ) {
@@ -13,7 +13,7 @@ const middleware = (req: NextRequest) => {
 
     const authorization = req.headers.get('auth')
 
-    if (authorization !== process.env.AUTH) {
+    if(authorization !== process.env.AUTH) {
       return NextResponse.json({
         error: 'Forbbiden'
       })
@@ -24,13 +24,13 @@ const middleware = (req: NextRequest) => {
 
   const intlRes = intl(req)
 
-  if (intlRes.headers.get('location')) {
+  if(intlRes.headers.get('location')) {
     return intlRes
   }
 
   const authRes = auth(req)
 
-  if (authRes.status !== 200) {
+  if(authRes.status !== 200) {
     return authRes
   }
 

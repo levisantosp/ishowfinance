@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma'
 import { getSessionCookie } from 'better-auth/cookies'
 import { auth } from '@/lib/auth'
 
-export const POST = async (req: NextRequest) => {
+export const POST = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
-  if (!sessionCookie) {
+  if(!sessionCookie) {
     return NextResponse.json({
       error: 'You must to be logged in'
     })
@@ -19,7 +19,7 @@ export const POST = async (req: NextRequest) => {
 
   const session = await auth.api.getSession({ headers: req.headers })
 
-  if (!session) {
+  if(!session) {
     return NextResponse.json({
       error: 'You must to be logged in'
     })
@@ -44,10 +44,10 @@ export const POST = async (req: NextRequest) => {
   })
 }
 
-export const GET = async (req: NextRequest) => {
+export const GET = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
-  if (!sessionCookie) {
+  if(!sessionCookie) {
     return NextResponse.json(
       {
         error: 'You must to be logged in'
@@ -61,7 +61,7 @@ export const GET = async (req: NextRequest) => {
   const queryOptions = req.headers.get('queryOptions')
   const method = req.headers.get('find')
 
-  if (!method) {
+  if(!method) {
     return NextResponse.json(
       {
         error: '\'method\' must be provided'
@@ -72,7 +72,7 @@ export const GET = async (req: NextRequest) => {
     )
   }
 
-  if (!queryOptions) {
+  if(!queryOptions) {
     return NextResponse.json(
       {
         error: '\'queryOptions\' must be provided'
@@ -85,7 +85,7 @@ export const GET = async (req: NextRequest) => {
 
   const parsedQueryOptions = JSON.parse(queryOptions)
 
-  switch (method) {
+  switch(method) {
     case 'many': {
       const organizations = await prisma.organization.findMany(parsedQueryOptions)
 

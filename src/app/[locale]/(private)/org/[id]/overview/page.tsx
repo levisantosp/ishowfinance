@@ -1,4 +1,3 @@
-import { getTranslations } from 'next-intl/server'
 import OrgOverview from '@components/private/org/Overview'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
@@ -24,11 +23,9 @@ export default async function Overview({ params }: Props) {
     }
   })
 
-  if (!member) {
+  if(!member) {
     notFound()
   }
-
-  const t = await getTranslations()
 
   return (
     <>

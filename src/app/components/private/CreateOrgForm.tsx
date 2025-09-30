@@ -16,11 +16,11 @@ export default function CreateOrgForm() {
 
   const isDisabled = !email.length || !name.length || loading || disabled
 
-  const createOrg = async (formData: FormData) => {
+  const createOrg = async(formData: FormData) => {
     const nameData = formData.get('name')
     const emailData = formData.get('email')
 
-    if (!nameData || !emailData) return
+    if(!nameData || !emailData) return
 
     const name = nameData.toString()
     const email = emailData.toString()
@@ -36,7 +36,7 @@ export default function CreateOrgForm() {
       body: JSON.stringify({ name, email })
     })).json()
 
-    if (!res.redirectTo) return
+    if(!res.redirectTo) return
 
     setLoading(false)
     setDisabled(true)

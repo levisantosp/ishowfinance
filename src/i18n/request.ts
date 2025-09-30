@@ -9,7 +9,7 @@ const locales = {
   'en-US': us
 }
 
-export default getRequestConfig(async ({ requestLocale }) => {
+export default getRequestConfig(async({ requestLocale }) => {
   const requested = await requestLocale
 
   const locale = hasLocale(routing.locales, requested)

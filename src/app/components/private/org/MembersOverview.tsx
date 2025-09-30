@@ -26,7 +26,7 @@ export default function MembersOverview(props: Props) {
   const [org, setOrg] = useState<Org | null>()
 
   useEffect(() => {
-    const findOrg = async () => {
+    const findOrg = async() => {
       const { organization }: {
         organization: Omit<Org, 'balance'> & {
           balance: string
@@ -62,7 +62,7 @@ export default function MembersOverview(props: Props) {
     findOrg()
   }, [])
 
-  if (org === null) {
+  if(org === null) {
     notFound()
   }
 

@@ -38,7 +38,7 @@ export default defineConfig([
       indent: ['error', 2, {
         ignoredNodes: ['CallExpression > MemberExpression']
       }],
-      quotes: ['error', 'double'],
+      quotes: ['error', 'single'],
       'keyword-spacing': ['error', {
         before: true,
         after: true,
@@ -58,7 +58,8 @@ export default defineConfig([
       '@typescript-eslint/no-explicit-any': 'off',
       'no-empty': 'off',
       'import/no-anonymous-default-export': 'off',
-      'react-hooks/exhaustive-deps': 'off'
+      'react-hooks/exhaustive-deps': 'off',
+      'react/react-in-jsx-scope': 'off'
     }
   }
 ])

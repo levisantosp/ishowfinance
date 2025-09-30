@@ -11,7 +11,7 @@ export default async function Profile() {
     headers: await headers()
   })
 
-  if (!session) {
+  if(!session) {
     authClient.signOut({
       fetchOptions: {
         headers: {

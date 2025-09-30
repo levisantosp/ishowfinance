@@ -28,7 +28,7 @@ export default function Overview({ id, locale }: Props) {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const findOrg = async () => {
+    const findOrg = async() => {
       const date = new Date()
 
       date.setDate(date.getDate() - 30)
@@ -72,7 +72,7 @@ export default function Overview({ id, locale }: Props) {
     findOrg()
   }, [])
 
-  if (org === null) {
+  if(org === null) {
     notFound()
   }
 

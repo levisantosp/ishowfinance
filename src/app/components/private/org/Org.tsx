@@ -35,7 +35,7 @@ export default function Org({ userId }: Props) {
   const [organizations, setOrganizations] = useState<Org[] | null>([])
 
   useEffect(() => {
-    const findOrganizations = async () => {
+    const findOrganizations = async() => {
       const res: {
         organizations: Org[]
       } = await (await fetch('/api/org', {
@@ -56,7 +56,7 @@ export default function Org({ userId }: Props) {
         }
       })).json()
 
-      if (res.organizations.length) {
+      if(res.organizations.length) {
         setOrganizations(res.organizations)
       }
 

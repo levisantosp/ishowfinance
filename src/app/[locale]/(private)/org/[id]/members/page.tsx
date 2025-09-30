@@ -1,6 +1,4 @@
 import { prisma } from '@/lib/prisma'
-import { getTranslations } from 'next-intl/server'
-import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { auth } from '@/lib/auth'
 import { headers } from 'next/headers'
@@ -24,7 +22,7 @@ export default async function Members({ params }: Props) {
     }
   })
 
-  if (!member) {
+  if(!member) {
     notFound()
   }
 

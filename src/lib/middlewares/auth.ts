@@ -19,7 +19,7 @@ const getLocale = (req: NextRequest) => {
   return parts.length > 0 ? parts[0] : 'en-US'
 }
 
-export default function (req: NextRequest) {
+export default function(req: NextRequest) {
   const path = req.nextUrl.pathname
   const publicRoute = publicRoutes.find(route => path.endsWith(route.path))
 
@@ -27,11 +27,11 @@ export default function (req: NextRequest) {
 
   const sessionCookie = getSessionCookie(req)
 
-  if (!sessionCookie && publicRoute) {
+  if(!sessionCookie && publicRoute) {
     return NextResponse.next()
   }
 
-  if (!sessionCookie && !publicRoute) {
+  if(!sessionCookie && !publicRoute) {
     const redirectUrl = req.nextUrl.clone()
 
     redirectUrl.pathname = `${locale}/login`
@@ -39,7 +39,7 @@ export default function (req: NextRequest) {
     return NextResponse.redirect(redirectUrl)
   }
 
-  if (sessionCookie && publicRoute && publicRoute.action === 'redirect') {
+  if(sessionCookie && publicRoute && publicRoute.action === 'redirect') {
     const redirectUrl = req.nextUrl.clone()
 
     redirectUrl.pathname = `${locale}/dash`
@@ -47,7 +47,7 @@ export default function (req: NextRequest) {
     return NextResponse.redirect(redirectUrl)
   }
 
-  if (sessionCookie && !publicRoute) {
+  if(sessionCookie && !publicRoute) {
     return NextResponse.next()
   }
 
