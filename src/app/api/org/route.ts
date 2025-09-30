@@ -7,9 +7,14 @@ export const POST = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
   if(!sessionCookie) {
-    return NextResponse.json({
-      error: 'You must to be logged in'
-    })
+    return NextResponse.json(
+      {
+        error: 'You must to be logged in'
+      },
+      {
+        status: 401
+      }
+    )
   }
 
   const data: {
@@ -20,9 +25,14 @@ export const POST = async(req: NextRequest) => {
   const session = await auth.api.getSession({ headers: req.headers })
 
   if(!session) {
-    return NextResponse.json({
-      error: 'You must to be logged in'
-    })
+    return NextResponse.json(
+      {
+        error: 'You must to be logged in'
+      },
+      {
+        status: 401
+      }
+    )
   }
 
   const org = await prisma.organization.create({
