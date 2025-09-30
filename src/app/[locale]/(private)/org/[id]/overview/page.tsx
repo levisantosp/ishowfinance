@@ -1,9 +1,9 @@
-import { getTranslations } from "next-intl/server"
-import OrgOverview from "@components/private/org/Overview"
-import { auth } from "@/lib/auth"
-import { headers } from "next/headers"
-import { prisma } from "@/lib/prisma"
-import { notFound } from "next/navigation"
+import { getTranslations } from 'next-intl/server'
+import OrgOverview from '@components/private/org/Overview'
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { prisma } from '@/lib/prisma'
+import { notFound } from 'next/navigation'
 
 type Props = {
   params: Promise<{
@@ -16,7 +16,7 @@ export default async function Overview({ params }: Props) {
   const { id, locale } = await params
 
   const session = await auth.api.getSession({ headers: await headers() })
-  
+
   const member = await prisma.member.findFirst({
     where: {
       userId: session?.user.id,
@@ -24,7 +24,7 @@ export default async function Overview({ params }: Props) {
     }
   })
 
-  if(!member) {
+  if (!member) {
     notFound()
   }
 

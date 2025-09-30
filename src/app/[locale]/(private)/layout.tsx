@@ -1,19 +1,19 @@
-import type { Metadata } from "next"
-import { Inter } from "next/font/google"
-import "../globals.css"
-import { hasLocale, NextIntlClientProvider } from "next-intl"
-import { notFound } from "next/navigation"
-import { getMessages, getTranslations } from "next-intl/server"
-import { routing } from "../../../i18n/routing.ts"
-import Header from "../../components/private/Header.tsx"
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import '../globals.css'
+import { hasLocale, NextIntlClientProvider } from 'next-intl'
+import { notFound } from 'next/navigation'
+import { getMessages, getTranslations } from 'next-intl/server'
+import { routing } from '../../../i18n/routing.ts'
+import Header from '../../components/private/Header.tsx'
 
-const inter = Inter({ subsets: ["latin"] })
+const inter = Inter({ subsets: ['latin'] })
 
-export const generateMetadata = async(): Promise<Metadata> => {
+export const generateMetadata = async (): Promise<Metadata> => {
   const t = await getTranslations()
   return {
-    title: t("metadata.title"),
-    description: t("metadata.description")
+    title: t('metadata.title'),
+    description: t('metadata.description')
   }
 }
 
@@ -25,7 +25,7 @@ type Props = {
 export default async function RootLayout({ children, params }: Props) {
   const { locale } = await params
 
-  if(!hasLocale(routing.locales, locale)) {
+  if (!hasLocale(routing.locales, locale)) {
     notFound()
   }
 
@@ -39,7 +39,7 @@ export default async function RootLayout({ children, params }: Props) {
           locale={locale}
         >
           <Header />
-          <main className="flex-grow">
+          <main className='flex-grow'>
             {children}
           </main>
         </NextIntlClientProvider>

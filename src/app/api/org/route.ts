@@ -1,14 +1,14 @@
-import { NextRequest, NextResponse } from "next/server"
-import { prisma } from "@/lib/prisma"
-import { getSessionCookie } from "better-auth/cookies"
-import { auth } from "@/lib/auth"
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { getSessionCookie } from 'better-auth/cookies'
+import { auth } from '@/lib/auth'
 
-export const POST = async(req: NextRequest) => {
+export const POST = async (req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
-  if(!sessionCookie) {
+  if (!sessionCookie) {
     return NextResponse.json({
-      error: "You must to be logged in"
+      error: 'You must to be logged in'
     })
   }
 
@@ -19,9 +19,9 @@ export const POST = async(req: NextRequest) => {
 
   const session = await auth.api.getSession({ headers: req.headers })
 
-  if(!session) {
+  if (!session) {
     return NextResponse.json({
-      error: "You must to be logged in"
+      error: 'You must to be logged in'
     })
   }
 
@@ -33,7 +33,7 @@ export const POST = async(req: NextRequest) => {
       members: {
         create: {
           userId: session.user.id,
-          role: "OWNER"
+          role: 'OWNER'
         }
       }
     }
@@ -44,13 +44,13 @@ export const POST = async(req: NextRequest) => {
   })
 }
 
-export const GET = async(req: NextRequest) => {
+export const GET = async (req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
-  if(!sessionCookie) {
+  if (!sessionCookie) {
     return NextResponse.json(
       {
-        error: "You must to be logged in"
+        error: 'You must to be logged in'
       },
       {
         status: 401
@@ -58,13 +58,13 @@ export const GET = async(req: NextRequest) => {
     )
   }
 
-  const queryOptions = req.headers.get("queryOptions")
-  const method = req.headers.get("find")
+  const queryOptions = req.headers.get('queryOptions')
+  const method = req.headers.get('find')
 
-  if(!method) {
+  if (!method) {
     return NextResponse.json(
       {
-        error: "'method' must be provided"
+        error: '\'method\' must be provided'
       },
       {
         status: 400
@@ -72,10 +72,10 @@ export const GET = async(req: NextRequest) => {
     )
   }
 
-  if(!queryOptions) {
+  if (!queryOptions) {
     return NextResponse.json(
       {
-        error: "'queryOptions' must be provided"
+        error: '\'queryOptions\' must be provided'
       },
       {
         status: 400
@@ -85,14 +85,14 @@ export const GET = async(req: NextRequest) => {
 
   const parsedQueryOptions = JSON.parse(queryOptions)
 
-  switch(method) {
-    case "many": {
+  switch (method) {
+    case 'many': {
       const organizations = await prisma.organization.findMany(parsedQueryOptions)
 
       return NextResponse.json({ organizations })
     }
-    
-    case "unique": {
+
+    case 'unique': {
       const organization = await prisma.organization.findUnique(parsedQueryOptions)
 
       return NextResponse.json({
@@ -106,7 +106,7 @@ export const GET = async(req: NextRequest) => {
 
     default: return NextResponse.json(
       {
-        error: "'find' value must be 'unique' or 'many'"
+        error: '\'find\' value must be \'unique\' or \'many\''
       },
       {
         status: 400

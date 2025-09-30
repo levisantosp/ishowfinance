@@ -7,4 +7,4 @@ services:
     container_name: ishowfinance
     restart: unless-stopped
     ports:
-      - "7600:3000"
+      - '7600:3000'

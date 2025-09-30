@@ -1,5 +1,5 @@
-import { getTranslations } from "next-intl/server"
-import CreateOrgForm from "@/app/components/private/CreateOrgForm"
+import { getTranslations } from 'next-intl/server'
+import CreateOrgForm from '@/app/components/private/CreateOrgForm'
 
 export default async function CreateOrg() {
   const t = await getTranslations()
@@ -7,17 +7,17 @@ export default async function CreateOrg() {
   return (
     <>
       <div
-        className="flex justify-center p-10"
+        className='flex justify-center p-10'
       >
         <h1
-          className="text-center text-3xl md:text-4xl font-bold"
+          className='text-center text-3xl md:text-4xl font-bold'
         >
-          {t("pages.org.create.title")}
+          {t('pages.org.create.title')}
         </h1>
       </div>
 
       <div
-        className="flex justify-center"
+        className='flex justify-center'
       >
         <CreateOrgForm />
       </div>
