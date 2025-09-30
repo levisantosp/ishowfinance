@@ -89,6 +89,6 @@ export const GET = async(req: NextRequest) => {
       })
     }
 
-    default: return NextResponse.json({ error: "'method' value must be 'unique' or 'many'" })
+    default: return NextResponse.json({ error: "'find' value must be 'unique' or 'many'" })
   }
 }
