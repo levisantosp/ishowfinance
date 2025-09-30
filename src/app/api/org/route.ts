@@ -48,24 +48,39 @@ export const GET = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
   if(!sessionCookie) {
-    return NextResponse.json({
-      error: "You must to be logged in"
-    })
+    return NextResponse.json(
+      {
+        error: "You must to be logged in"
+      },
+      {
+        status: 401
+      }
+    )
   }
 
   const queryOptions = req.headers.get("queryOptions")
   const method = req.headers.get("find")
 
   if(!method) {
-    return NextResponse.json({
-      error: "'method' must be provided"
-    })
+    return NextResponse.json(
+      {
+        error: "'method' must be provided"
+      },
+      {
+        status: 400
+      }
+    )
   }
 
   if(!queryOptions) {
-    return NextResponse.json({
-      error: "'queryOptions' must be provided"
-    })
+    return NextResponse.json(
+      {
+        error: "'queryOptions' must be provided"
+      },
+      {
+        status: 400
+      }
+    )
   }
 
   const parsedQueryOptions = JSON.parse(queryOptions)
@@ -89,6 +104,13 @@ export const GET = async(req: NextRequest) => {
       })
     }
 
-    default: return NextResponse.json({ error: "'find' value must be 'unique' or 'many'" })
+    default: return NextResponse.json(
+      {
+        error: "'find' value must be 'unique' or 'many'"
+      },
+      {
+        status: 400
+      }
+    )
   }
 }
