@@ -14,4 +14,4 @@ COPY . .
 RUN pnpm build
 RUN pnpm prisma db push
 
-CMD [ 'pnpm', 'start' ]
+CMD [ "pnpm", "start" ]
