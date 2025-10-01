@@ -28,7 +28,12 @@
         "title": "Criar uma Organização",
         "name": "Nome da organização",
         "email": "Email para contato",
-        "submit": "Criar"
+        "submit": "Criar",
+        "currency": {
+          "USD": "USD - Dólar Americano",
+          "BRL": "BRL - Real Brasileiro",
+          "EUR": "EUR - Euro"
+        }
       },
       "overview": {
         "balance": "Saldo",
