@@ -3,6 +3,11 @@ on:
   push:
     branches:
       - 'master'
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'README*'
+      - 'LICENSE'
 jobs:
   deploy:
     name: 'Deploy to Production'
