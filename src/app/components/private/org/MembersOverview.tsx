@@ -121,7 +121,7 @@ export default function MembersOverview(props: Props) {
                   <span
                     className='md:text-lg text-gray-400'
                   >
-                    {t(`pages.profile.role.${member.role}`)}
+                    {t(`pages.dash.profile.role.${member.role}`)}
                   </span>
                 </div>
                 <div
