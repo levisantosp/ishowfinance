@@ -10,17 +10,17 @@
       "microsoft": "Continue with Microsoft"
     },
     "dash": {
-      "title": "Dashboard"
-    },
-    "profile": {
-      "title": "Profile",
-      "organizations": "Your Organizations",
-      "welcome": "Welcome to your Profile",
-      "you_dont_have_orgs": "You don't have any organizations yet",
-      "role": {
-        "OWNER": "Owner",
-        "ADMIN": "Administrator",
-        "MEMBER": "Member"
+      "title": "Dashboard",
+      "profile": {
+        "title": "Profile",
+        "organizations": "Your Organizations",
+        "welcome": "Welcome to your Profile",
+        "you_dont_have_orgs": "You don't have any organizations yet",
+        "role": {
+          "OWNER": "Owner",
+          "ADMIN": "Administrator",
+          "MEMBER": "Member"
+        }
       }
     },
     "org": {
@@ -53,7 +53,6 @@
   "header": {
     "menu": {
       "language": "Language: English",
-      "profile": "Your Profile",
       "create_org": "Create Organization",
       "signout": "Sign Out"
     }

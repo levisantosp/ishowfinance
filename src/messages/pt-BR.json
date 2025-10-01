@@ -10,17 +10,17 @@
       "microsoft": "Continuar com a Microsoft"
     },
     "dash": {
-      "title": "Painel de Controle"
-    },
-    "profile": {
-      "title": "Perfil",
-      "organizations": "Suas Organizações",
-      "welcome": "Bem-vindo(a) ao seu Perfil",
-      "you_dont_have_orgs": "Você ainda não possui nenhuma organização",
-      "role": {
-        "OWNER": "Dono",
-        "ADMIN": "Administrador",
-        "MEMBER": "Membro"
+      "title": "Painel de Controle",
+      "profile": {
+        "title": "Perfil",
+        "organizations": "Suas Organizações",
+        "welcome": "Bem-vindo(a) ao seu Perfil",
+        "you_dont_have_orgs": "Você ainda não possui nenhuma organização",
+        "role": {
+          "OWNER": "Dono",
+          "ADMIN": "Administrador",
+          "MEMBER": "Membro"
+        }
       }
     },
     "org": {
@@ -53,7 +53,6 @@
   "header": {
     "menu": {
       "language": "Idioma: Português",
-      "profile": "Seu Perfil",
       "create_org": "Criar Organização",
       "signout": "Sair"
     }
