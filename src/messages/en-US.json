@@ -1,11 +1,11 @@
 {
   "metadata": {
     "title": "ishowfinance | Financial Management for Businesses",
-    "description": "iShowFinance is a financial management platform for businesses. Record income and expenses automatically or manually, manage team members, and track real-time reports to strengthen your company’s financial health."
+    "description": "IShowFinance is a financial management platform for businesses. Record income and expenses automatically or manually, manage team members, and track real-time reports to strengthen your company’s financial health."
   },
   "pages": {
     "login": {
-      "title": "Log in to iShowFinance",
+      "title": "Log in to IShowFinance",
       "google": "Continue with Google",
       "microsoft": "Continue with Microsoft"
     },

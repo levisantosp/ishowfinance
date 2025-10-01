@@ -1,11 +1,11 @@
 {
   "metadata": {
     "title": "ishowfinance | Gestão Financeira para Empresas",
-    "description": "A iShowFinance é uma plataforma de gestão financeira para empresas. Organize entradas e saídas de forma automática ou manual, controle membros da sua equipe e acompanhe relatórios em tempo real para melhorar a saúde financeira do seu negócio."
+    "description": "A IShowFinance é uma plataforma de gestão financeira para empresas. Organize entradas e saídas de forma automática ou manual, controle membros da sua equipe e acompanhe relatórios em tempo real para melhorar a saúde financeira do seu negócio."
   },
   "pages": {
     "login": {
-      "title": "Fazer Login na iShowFinance",
+      "title": "Fazer Login na IShowFinance",
       "google": "Continuar com o Google",
       "microsoft": "Continuar com a Microsoft"
     },
