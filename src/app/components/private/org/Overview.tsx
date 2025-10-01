@@ -105,7 +105,7 @@ export default function Overview({ id, locale }: Props) {
               {org.name}
             </h2>
             <div
-              className='absolute right-10'
+              className='absolute top-20 right-5 md:right-10 md:top-auto max-md:top-20'
             >
               <div
                 className='relative inline-block'
