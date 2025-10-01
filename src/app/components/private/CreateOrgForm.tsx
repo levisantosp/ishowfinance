@@ -72,6 +72,7 @@ export default function CreateOrgForm() {
           name='name'
           value={name}
           onChange={(input) => setName(input.target.value)}
+          autoComplete='off'
         />
 
         <input
