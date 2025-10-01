@@ -23,6 +23,7 @@ export default function LanguageMenu() {
       <div
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
+        onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
         className='relative inline-block'
       >
         <Languages
@@ -38,7 +39,7 @@ export default function LanguageMenu() {
           leaveTo='opacity-0 translate-y-2'
         >
           <div
-            className='flex flex-col gap-1 absolute top-12 right-0 rounded-2xl border border-gray-500 w-40 z-20'
+            className='flex flex-col gap-1 absolute top-12 right-0 rounded-2xl border border-gray-500 w-40 z-20 bg-[#171717]'
           >
             <div
               className='cursor-pointer hover:bg-[#444444] rounded-2xl transition px-4 py-2'
