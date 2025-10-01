@@ -4,8 +4,9 @@ import '../globals.css'
 import { hasLocale, NextIntlClientProvider } from 'next-intl'
 import { notFound } from 'next/navigation'
 import { getMessages, getTranslations } from 'next-intl/server'
-import { routing } from '../../../i18n/routing.ts'
-import Header from '../../components/public/Header.tsx'
+import { routing } from '@i18n/routing'
+import Header from '@components/public/Header'
+import Footer from '@components/global/Footer'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -42,8 +43,8 @@ export default async function RootLayout({ children, params }: Props) {
           <main className='flex-grow'>
             {children}
           </main>
+          <Footer />
         </NextIntlClientProvider>
-        {/* <Footer /> */}
       </body>
     </html>
   )
