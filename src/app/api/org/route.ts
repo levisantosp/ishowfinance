@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getSessionCookie } from 'better-auth/cookies'
 import { auth } from '@/lib/auth'
+import { $Enums } from '@prisma/client'
 
 export const POST = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
@@ -20,6 +21,7 @@ export const POST = async(req: NextRequest) => {
   const data: {
     email: string
     name: string
+    currency: $Enums.Currency
   } = await req.json()
 
   const session = await auth.api.getSession({ headers: req.headers })
@@ -45,7 +47,8 @@ export const POST = async(req: NextRequest) => {
           userId: session.user.id,
           role: 'OWNER'
         }
-      }
+      },
+      currency: data.currency
     }
   })
 

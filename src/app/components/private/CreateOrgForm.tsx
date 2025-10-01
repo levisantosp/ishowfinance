@@ -4,6 +4,12 @@ import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
+const currencies = [
+  'BRL',
+  'USD',
+  'EUR'
+] as const
+
 export default function CreateOrgForm() {
   const t = useTranslations()
 
@@ -11,6 +17,7 @@ export default function CreateOrgForm() {
   const [name, setName] = useState('')
   const [loading, setLoading] = useState(false)
   const [disabled, setDisabled] = useState(false)
+  const [currency, setCurrency] = useState('BRL')
 
   const router = useRouter()
 
@@ -19,11 +26,13 @@ export default function CreateOrgForm() {
   const createOrg = async(formData: FormData) => {
     const nameData = formData.get('name')
     const emailData = formData.get('email')
+    const currencyData = formData.get('currency')
 
-    if(!nameData || !emailData) return
+    if(!nameData || !emailData || !currencyData) return
 
     const name = nameData.toString()
     const email = emailData.toString()
+    const currency = currencyData.toString()
 
     const res: {
       redirectTo?: string
@@ -33,7 +42,7 @@ export default function CreateOrgForm() {
       headers: {
         auth: process.env.NEXT_PUBLIC_AUTH
       },
-      body: JSON.stringify({ name, email })
+      body: JSON.stringify({ name, email, currency })
     })).json()
 
     if(!res.redirectTo) return
@@ -74,11 +83,30 @@ export default function CreateOrgForm() {
           onChange={(input) => setEmail(input.target.value)}
         />
 
+        <select
+          name='currency'
+          value={currency}
+          onChange={(input) => setCurrency(input.target.value)}
+          className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+        >
+          {
+            currencies.map((c) => (
+              <option
+                key={c}
+                value={c}
+                className='rounded-2xl bg-[#171717]'
+              >
+                {t(`pages.org.create.currency.${c}`)}
+              </option>
+            ))
+          }
+        </select>
+
         <button
           type='submit'
           className='
-            flex w-full rounded-2xl bg-green-700 borderpl-4 py-2
-            justify-center items-center text-center mt-10
+            flex w-full rounded-2xl bg-green-700 py-2
+            justify-center items-center text-center mt-5
             transition duration-300 hover:bg-green-600
             disabled:bg-green-900 disabled:cursor-not-allowed disabled:text-gray-300
             '
