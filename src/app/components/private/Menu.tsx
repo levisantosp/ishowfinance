@@ -58,26 +58,6 @@ export default function Menu() {
           >
             <div
               className='
-              cursor-pointer
-              transition duration-300 hover:bg-[#444444]
-              rounded-2xl px-4 py-2
-              '
-              onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
-            >
-              <Link
-                href='/profile'
-                className='flex gap-2'
-              >
-                <Lucide.User />
-
-                <span>
-                  {t('header.menu.profile')}
-                </span>
-              </Link>
-            </div>
-
-            <div
-              className='
               flex gap-2 cursor-pointer
               transition duration-300 hover:bg-[#444444]
               rounded-2xl px-4 py-2
