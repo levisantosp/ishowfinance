@@ -80,12 +80,12 @@ export default function Org({ userId }: Props) {
         </div>
       )}
       <div
-        className='grid grid-cols-1 md:grid-cols-2 gap-x-50 gap-y-3 pt-3 place-items-center'
+        className='grid grid-cols-1 md:grid-cols-2 gap-x-30 gap-y-3 pt-3 place-items-center'
       >
         {organizations && organizations.length > 0 && organizations.map(org => (
           <div
             key={org.id}
-            className='border border-gray-500 py-3 px-7 rounded-2xl'
+            className='border border-gray-500 py-3 px-7 rounded-2xl w-74 min-h-14'
           >
             <Link
               href={`/org/${org.id}/overview`}
@@ -100,7 +100,7 @@ export default function Org({ userId }: Props) {
             <span
               className='text-gray-400 font-medium'
             >
-              {t(`pages.profile.role.${org.members[0].role}`)}
+              {t(`pages.dash.profile.role.${org.members[0].role}`)}
             </span>
           </div>
         ))}
@@ -117,7 +117,7 @@ export default function Org({ userId }: Props) {
             <span
               className='text-xs text-center text-red-400'
             >
-              {t('pages.profile.you_dont_have_orgs')}
+              {t('pages.dash.profile.you_dont_have_orgs')}
             </span>
           </div>
         )}
