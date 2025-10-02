@@ -36,7 +36,8 @@ export default defineConfig([
   {
     rules: {
       indent: ['error', 2, {
-        ignoredNodes: ['CallExpression > MemberExpression']
+        ignoredNodes: ['CallExpression > MemberExpression'],
+        SwitchCase: 1
       }],
       quotes: ['error', 'single'],
       'keyword-spacing': ['error', {
