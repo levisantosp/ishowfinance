@@ -5,6 +5,7 @@ import * as Lucide from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useState } from 'react'
 import LanguageMenu from './LanguageMenu.tsx'
+import MobileLanguageMenu from './MobileLanguageMenu.tsx'
 import Link from 'next/link'
 import { authClient } from '@/lib/auth-client'
 import { useRouter } from 'next/navigation'
@@ -70,9 +71,21 @@ export default function Menu() {
                 {t('header.menu.language')}
               </span>
 
-              <LanguageMenu
-                isOpen={languageIsOpen}
-              />
+              <div
+                className='hidden md:block'
+              >
+                <LanguageMenu
+                  isOpen={languageIsOpen}
+                />
+              </div>
+
+              <div
+                className='block md:hidden'
+              >
+                <MobileLanguageMenu
+                  isOpen={languageIsOpen}
+                />
+              </div>
             </div>
 
             <div
