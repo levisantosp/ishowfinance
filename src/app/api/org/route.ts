@@ -102,7 +102,12 @@ export const GET = async(req: NextRequest) => {
     case 'many': {
       const organizations = await prisma.organization.findMany(parsedQueryOptions)
 
-      return NextResponse.json({ organizations })
+      return NextResponse.json({
+        organizations: organizations.map(({ balance, ...org }) => ({
+          ...org,
+          balance: balance.toString()
+        }))
+      })
     }
 
     case 'unique': {
