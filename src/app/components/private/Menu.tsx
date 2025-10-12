@@ -32,7 +32,7 @@ export default function Menu() {
   return (
     <>
       <div
-        className='relative inline-block'
+        className='relative inline-block cursor-pointer'
       >
         <Lucide.Menu
           className='rounded-lg border border-gray-500 p-1'

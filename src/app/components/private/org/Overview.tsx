@@ -108,7 +108,7 @@ export default function Overview({ id, locale }: Props) {
               className='absolute top-20 right-5 md:right-10 md:top-auto max-md:top-20'
             >
               <div
-                className='relative inline-block'
+                className='relative inline-block cursor-pointer'
               >
                 <Lucide.Menu
                   className='rounded-lg border border-gray-500 p-1'
