@@ -46,8 +46,7 @@ export default function CreateOrgForm() {
     })).json()
 
     if(!res.redirectTo) return
-
-    setLoading(false)
+    
     setDisabled(true)
 
     router.push(res.redirectTo)
@@ -110,6 +109,7 @@ export default function CreateOrgForm() {
             justify-center items-center text-center mt-5
             transition duration-300 hover:bg-green-600
             disabled:bg-green-900 disabled:cursor-not-allowed disabled:text-gray-300
+            cursor-pointer
             '
           disabled={isDisabled}
         >
