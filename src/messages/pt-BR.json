@@ -20,7 +20,8 @@
           "OWNER": "Dono",
           "ADMIN": "Administrador",
           "MEMBER": "Membro"
-        }
+        },
+        "total_balance": "Saldo total"
       }
     },
     "org": {

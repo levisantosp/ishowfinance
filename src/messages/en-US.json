@@ -20,7 +20,8 @@
           "OWNER": "Owner",
           "ADMIN": "Administrator",
           "MEMBER": "Member"
-        }
+        },
+        "total_balance": "Total balance"
       }
     },
     "org": {
