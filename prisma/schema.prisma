@@ -29,7 +29,6 @@ model Organization {
   id         String     @id @default(uuid())
   name       String
   email      String
-  balance    BigInt     @default(0)
   currency   Currency   @default(BRL)
   tokens     Token[]
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
