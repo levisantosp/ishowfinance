@@ -6,7 +6,13 @@ import { headers } from 'next/headers'
 import { authClient } from '@/lib/auth-client'
 import { redirect } from 'next/navigation'
 
-export default async function Login() {
+type Props = {
+  params: Promise<{
+    locale: string
+  }>
+}
+
+export default async function Login(props: Props) {
   const t = await getTranslations()
 
   const session = await auth.api.getSession({ headers: await headers() })
@@ -25,6 +31,8 @@ export default async function Login() {
 
     return null
   }
+
+  const { locale } = await props.params
 
   return (
     <>
@@ -78,6 +86,7 @@ export default async function Login() {
 
           <Org
             userId={session.user.id}
+            locale={locale}
           />
         </div>
       </div>
