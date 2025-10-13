@@ -21,18 +21,15 @@ type Org = Prisma.OrganizationGetPayload<{
 type Props = {
   id: string
   locale: string
+  isAdmin: boolean
 }
 
-export default function Overview({ id, locale }: Props) {
+export default function Overview({ id, locale, isAdmin }: Props) {
   const [org, setOrg] = useState<Org | null>()
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     const findOrg = async() => {
-      const date = new Date()
-
-      date.setDate(date.getDate() - 30)
-
       const { organization }: {
         organization: Omit<Org, 'balance'> & {
           balance: string
@@ -46,13 +43,7 @@ export default function Overview({ id, locale }: Props) {
             include: {
               categories: {
                 include: {
-                  transactions: {
-                    where: {
-                      createdAt: {
-                        gte: date
-                      }
-                    }
-                  }
+                  transactions: true
                 }
               }
             }
@@ -60,13 +51,7 @@ export default function Overview({ id, locale }: Props) {
         }
       })).json()
 
-      setOrg(
-        !organization ? null :
-          {
-            ...organization,
-            balance: BigInt(organization.balance)
-          }
-      )
+      setOrg(organization)
     }
 
     findOrg()
@@ -110,7 +95,7 @@ export default function Overview({ id, locale }: Props) {
               <div
                 className='relative inline-block cursor-pointer'
               >
-                <Lucide.Menu
+                <Lucide.Logs
                   className='rounded-lg border border-gray-500 p-1'
                   size={30}
                   onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
@@ -133,6 +118,28 @@ export default function Overview({ id, locale }: Props) {
                   bg-[#171717]
                     '
                   >
+                    {isAdmin && (
+                      <div
+                        className='
+                        cursor-pointer
+                        transition duration-300 hover:bg-[#444444]
+                        rounded-2xl px-4 py-2
+                        '
+                        onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
+                      >
+                        <Link
+                          href={`/${locale}/org/${id}/edit`}
+                          className='flex gap-2'
+                        >
+                          <Lucide.Pencil />
+
+                          <span>
+                            {t('pages.org.menu.edit')}
+                          </span>
+                        </Link>
+                      </div>
+                    )}
+
                     <div
                       className='
                       cursor-pointer
@@ -162,73 +169,143 @@ export default function Overview({ id, locale }: Props) {
             className='flex flex-col md:flex-row justify-center gap-5 px-5 md:px-0'
           >
             <div
-              className='rounded-2xl border border-gray-500 p-10'
+              className='flex justify-between items-center rounded-2xl border border-gray-500 p-7 gap-5'
             >
-              <h2
-                className='text-xl md:text-2xl font-semibold'
-              >
-                {t('pages.org.overview.balance')}
-              </h2>
+              <div>
+                <h2
+                  className='text-xl md:text-2xl font-semibold'
+                >
+                  {t('pages.org.overview.today_income')}
+                </h2>
 
-              <span
-                className='md:text-lg text-gray-400'
-              >
-                {
-                  (Number(org.balance) / 100)
-                    .toLocaleString(
-                      locale,
-                      {
+                <span
+                  className='md:text-lg text-gray-400'
+                >
+                  {
+                    (org.categories
+                      .map(category => ({
+                        ...category,
+                        transactions: category.transactions.filter(t => {
+                          const today = new Date()
+                          const transactionDate = new Date(t.createdAt)
+
+                          return transactionDate.getDate() === today.getDate() &&
+                            transactionDate.getMonth() === today.getMonth() &&
+                            transactionDate.getFullYear() === today.getFullYear()
+                        })
+                      }))
+                      .reduce((sum, category) => {
+                        const total = category.transactions.reduce((csum, transaction) =>
+                          csum + Number(transaction.amount), 0
+                        )
+
+                        return sum + total
+                      }, 0))
+                      .toLocaleString(locale, {
                         style: 'currency',
                         currency: org.currency
-                      }
-                    )
-                }
-              </span>
+                      })
+                  }
+                </span>
+              </div>
+
+              <Lucide.BanknoteArrowDown
+                className='text-green-400 bg-green-600/30 rounded-xl p-2'
+                size={60}
+              />  
             </div>
 
             <div
-              className='rounded-2xl border border-gray-500 p-10'
+              className='flex justify-between items-center rounded-2xl border border-gray-500 p-7 gap-5'
             >
-              <h2
-                className='text-xl md:text-2xl font-semibold'
-              >
-                {t('pages.org.overview.summary.title')}
-              </h2>
+              <div>
+                <h2
+                  className='text-xl md:text-2xl font-semibold'
+                >
+                  {t('pages.org.overview.week_income')}
+                </h2>
 
-              <span
-                className='md:text-lg text-gray-400'
-              >
-                {t.rich('pages.org.overview.summary.description', {
-                  income: org.categories.reduce((total, category) => {
-                    const ctotal = category.transactions.filter(t => t.type === 'INCOME')
-                      .reduce((total, transaction) =>
-                        total + Number(transaction.amount), 0
-                      )
+                <span
+                  className='md:text-lg text-gray-400'
+                >
+                  {
+                    (org.categories
+                      .map(category => ({
+                        ...category,
+                        transactions: category.transactions.filter(t => {
+                          const today = new Date()
+                          const startOfWeek = new Date()
 
-                    return ctotal + total
-                  }, 0).toLocaleString(
-                    locale,
-                    {
-                      style: 'currency',
-                      currency: org.currency
-                    }
-                  ),
-                  expense: org.categories.reduce((total, category) => {
-                    const ctotal = category.transactions.filter(t => t.type === 'EXPENSE')
-                      .reduce((total, transaction) =>
-                        total + Number(transaction.amount), 0
-                      )
+                          startOfWeek.setDate(today.getDate() - today.getDay())
+                          startOfWeek.setHours(0, 0, 0, 0)
 
-                    return ctotal + total
-                  }, 0).toLocaleString(
-                    locale,
-                    {
-                      style: 'currency',
-                      currency: org.currency
-                    }
-                  )
-                })}
-              </span>
+                          return new Date(t.createdAt) >= startOfWeek
+                        })
+                      }))
+                      .reduce((sum, category) => {
+                        const total = category.transactions.reduce((csum, transaction) =>
+                          csum + Number(transaction.amount), 0
+                        )
+
+                        return sum + total
+                      }, 0))
+                      .toLocaleString(locale, {
+                        style: 'currency',
+                        currency: org.currency
+                      })
+                  }
+                </span>
+              </div>
+
+              <Lucide.BanknoteArrowDown
+                className='text-blue-400 bg-blue-600/30 rounded-xl p-2'
+                size={60}
+              />
+            </div>
+
+            <div
+              className='flex justify-between items-center rounded-2xl border border-gray-500 p-7 gap-5'
+            >
+              <div>
+                <h2
+                  className='text-xl md:text-2xl font-semibold'
+                >
+                  {t('pages.org.overview.month_income')}
+                </h2>
+
+                <span
+                  className='md:text-lg text-gray-400'
+                >
+                  {
+                    (org.categories
+                      .map(category => ({
+                        ...category,
+                        transactions: category.transactions.filter(t => {
+                          const today = new Date()
+                          const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
+
+                          return new Date(t.createdAt) >= startOfMonth
+                        })
+                      }))
+                      .reduce((sum, category) => {
+                        const total = category.transactions.reduce((csum, transaction) =>
+                          csum + Number(transaction.amount), 0
+                        )
+
+                        return sum + total
+                      }, 0))
+                      .toLocaleString(locale, {
+                        style: 'currency',
+                        currency: org.currency
+                      })
+                  }
+                </span>
+              </div>
+
+              <Lucide.BanknoteArrowDown
+                className='text-purple-400 bg-purple-600/30 rounded-xl p-2'
+                size={60}
+              />
             </div>
           </div>
         </>
