@@ -3,10 +3,10 @@ import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 
-export const POST = async (req: NextRequest) => {
+export const POST = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
-  if (!sessionCookie) {
+  if(!sessionCookie) {
     return NextResponse.json(
       {
         error: 'You must to be logged in'
@@ -17,7 +17,6 @@ export const POST = async (req: NextRequest) => {
     )
   }
 
-  
   const session = await auth.api.getSession({ headers: req.headers })
 
   if(!session) {
@@ -36,7 +35,7 @@ export const POST = async (req: NextRequest) => {
     id: string
   } = await req.json()
 
-  const category = await prisma.category.create({
+  await prisma.category.create({
     data:{
       name: data.name,
       organizationId: data.id
