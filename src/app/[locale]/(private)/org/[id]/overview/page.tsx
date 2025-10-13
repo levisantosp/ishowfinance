@@ -29,7 +29,7 @@ export default async function Overview({ params }: Props) {
 
   return (
     <>
-      <OrgOverview id={id} locale={locale} />
+      <OrgOverview id={id} locale={locale} isAdmin={['OWNER', 'ADMIN'].includes(member.role)} />
     </>
   )
 }
