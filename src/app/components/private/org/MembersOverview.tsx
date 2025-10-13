@@ -50,13 +50,7 @@ export default function MembersOverview(props: Props) {
         }
       })).json()
 
-      setOrg(
-        !organization ? null :
-          {
-            ...organization,
-            balance: BigInt(organization.balance)
-          }
-      )
+      setOrg(organization)
     }
 
     findOrg()
@@ -108,7 +102,7 @@ export default function MembersOverview(props: Props) {
             </h2>
           </div>
           <div
-            className='flex justify-center'
+            className='flex flex-col gap-5 items-center'
           >
             {org.members.map(member => (
               <div
