@@ -21,7 +21,7 @@
           "ADMIN": "Administrator",
           "MEMBER": "Member"
         },
-        "total_balance": "Total balance"
+        "today_income": "Today's income"
       }
     },
     "org": {
@@ -37,7 +37,9 @@
         }
       },
       "overview": {
-        "balance": "Balance",
+        "today_income": "Today's Income",
+        "week_income": "Weekly Income",
+        "month_income": "Monthly Income",
         "summary": {
           "title": "Financial Summary",
           "description": "The company earned {income} and spent {expense} in the last 30 days"
@@ -47,7 +49,11 @@
         "title": "Members"
       },
       "menu": {
-        "members": "Members"
+        "members": "Members",
+        "edit": "Edit"
+      },
+      "edit": {
+        "title": "Edit {org}"
       }
     }
   },

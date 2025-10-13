@@ -21,7 +21,7 @@
           "ADMIN": "Administrador",
           "MEMBER": "Membro"
         },
-        "total_balance": "Saldo total"
+        "today_income": "Renda de hoje"
       }
     },
     "org": {
@@ -37,7 +37,9 @@
         }
       },
       "overview": {
-        "balance": "Saldo",
+        "today_income": "Rendas de Hoje",
+        "week_income": "Rendas da Semana",
+        "month_income": "Rendas do Mês",
         "summary": {
           "title": "Resumo Financeiro",
           "description": "A empresa ganhou {income} e gastou {expense} nos últimos 30 dias"
@@ -47,7 +49,11 @@
         "title": "Membros"
       },
       "menu": {
-        "members": "Membros"
+        "members": "Membros",
+        "edit": "Editar"
+      },
+      "edit": {
+        "title": "Editar {org}"
       }
     }
   },
