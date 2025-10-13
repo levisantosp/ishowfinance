@@ -65,7 +65,7 @@ export default function Menu() {
               '
               onClick={() => languageIsOpen ? setLanguageIsOpen(false) : setLanguageIsOpen(true)}
             >
-              <Lucide.Languages />
+              <Lucide.Languages color='#99a1af' />
 
               <span>
                 {t('header.menu.language')}
@@ -100,7 +100,7 @@ export default function Menu() {
                 href='/org/create'
                 className='flex gap-2'
               >
-                <Lucide.Plus />
+                <Lucide.Plus color='#99a1af' />
                 <span>
                   {t('header.menu.create_org')}
                 </span>
@@ -115,7 +115,7 @@ export default function Menu() {
               '
               onClick={() => signOut()}
             >
-              <Lucide.LogOut />
+              <Lucide.LogOut color='#99a1af' />
 
               <span>
                 {t('header.menu.signout')}
