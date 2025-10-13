@@ -131,7 +131,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           href={`/${locale}/org/${id}/edit`}
                           className='flex gap-2'
                         >
-                          <Lucide.Pencil />
+                          <Lucide.Pencil color='#99a1af' />
 
                           <span>
                             {t('pages.org.menu.edit')}
@@ -149,10 +149,30 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                       onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
                     >
                       <Link
+                        href={`/${locale}/org/${id}/categories`}
+                        className='flex gap-2'
+                      >
+                        <Lucide.ChartBarStacked color='#99a1af' />
+
+                        <span>
+                          {t('pages.org.menu.categories')}
+                        </span>
+                      </Link>
+                    </div>
+
+                    <div
+                      className='
+                      cursor-pointer
+                      transition duration-300 hover:bg-[#444444]
+                      rounded-2xl px-4 py-2
+                      '
+                      onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
+                    >
+                      <Link
                         href={`/${locale}/org/${id}/members`}
                         className='flex gap-2'
                       >
-                        <Lucide.User />
+                        <Lucide.User color='#99a1af' />
 
                         <span>
                           {t('pages.org.menu.members')}
@@ -212,7 +232,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               <Lucide.BanknoteArrowDown
                 className='text-green-400 bg-green-600/30 rounded-xl p-2'
                 size={60}
-              />  
+              />
             </div>
 
             <div
