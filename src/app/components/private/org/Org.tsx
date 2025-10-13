@@ -1,31 +1,25 @@
 'use client'
 
-import { $Enums } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { RiErrorWarningLine } from 'react-icons/ri'
 import Link from 'next/link'
 
-type Member = {
-  id: string
-  userId: string
-  createdAt: Date
-  updatedAt: Date
-  role: $Enums.Role
-  organizationId: string
-}
-
-type Org = {
-  id: string
-  email: string
-  createdAt: Date
-  updatedAt: Date
-  userId: string
-  name: string
-  members: Member[]
-  balance: string
-  currency: $Enums.Currency
-}
+type Org = Prisma.OrganizationGetPayload<{
+  include: {
+    members: {
+      where: {
+        userId: string
+      }
+    },
+    categories: {
+      include: {
+        transactions: true
+      }
+    }
+  }
+}>
 
 type Props = {
   userId: string
@@ -38,6 +32,14 @@ export default function Org({ userId, locale }: Props) {
   const [organizations, setOrganizations] = useState<Org[] | null>([])
 
   useEffect(() => {
+    const startOfDay = new Date()
+      .setHours(0, 0, 0, 0)
+
+    const startOfNextDay = new Date()
+    
+    startOfNextDay.setDate(startOfNextDay.getDate() + 1)
+    startOfNextDay.setHours(0, 0, 0, 0)
+    
     const findOrganizations = async() => {
       const res: {
         organizations: Org[]
@@ -46,9 +48,26 @@ export default function Org({ userId, locale }: Props) {
           auth: process.env.NEXT_PUBLIC_AUTH,
           find: 'many',
           queryOptions: JSON.stringify({
+            where: {
+              members: {
+                some: { userId }
+              }
+            },
             include: {
               members: {
                 where: { userId }
+              },
+              categories: {
+                include: {
+                  transactions: {
+                    where: {
+                      createdAt: {
+                        gte: new Date(startOfDay),
+                        lt: startOfNextDay
+                      }
+                    }
+                  }
+                }
               }
             }
           })
@@ -111,15 +130,21 @@ export default function Org({ userId, locale }: Props) {
                 <h3
                   className='font-medium'
                 >
-                  {t('pages.dash.profile.total_balance')}
+                  {t('pages.dash.profile.today_income')}
                 </h3>
 
                 <span
                   className='text-gray-400'
                 >
-                  {(Number(org.balance) / 100).toLocaleString(locale, {
-                    currency: org.currency,
-                    style: 'currency'
+                  {(org.categories.reduce((sum, category) => {
+                    const total = category.transactions.reduce((csum, transaction) =>
+                      csum + Number(transaction.amount), 0
+                    )
+
+                    return sum + total
+                  }, 0)).toLocaleString(locale, {
+                    style: 'currency',
+                    currency: org.currency
                   })}
                 </span>
               </div>
