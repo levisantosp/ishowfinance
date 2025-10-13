@@ -100,13 +100,10 @@ export const GET = async(req: NextRequest) => {
 
   switch(method) {
     case 'many': {
-      const organizations = await prisma.organization.findMany(parsedQueryOptions)
+      const organizations: any = await prisma.organization.findMany(parsedQueryOptions)
 
       return NextResponse.json({
-        organizations: organizations.map(({ balance, ...org }) => ({
-          ...org,
-          balance: balance.toString()
-        }))
+        organizations: JSON.parse(JSON.stringify(organizations, (_, v) => typeof v === 'bigint' ? v.toString() : v))
       })
     }
 
@@ -114,11 +111,7 @@ export const GET = async(req: NextRequest) => {
       const organization = await prisma.organization.findUnique(parsedQueryOptions)
 
       return NextResponse.json({
-        organization: !organization ? null :
-          {
-            ...organization,
-            balance: organization.balance.toString()
-          }
+        organization: JSON.parse(JSON.stringify(organization, (_, v) => typeof v === 'bigint' ? v.toString() : v))
       })
     }
 
