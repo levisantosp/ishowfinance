@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import { RiErrorWarningLine } from 'react-icons/ri'
 import Link from 'next/link'
+import Loading from '@components/global/Loading'
 
 type Org = Prisma.OrganizationGetPayload<{
   include: {
@@ -92,9 +93,7 @@ export default function Org({ userId, locale }: Props) {
         <div
           className='flex justify-center py-10 md:px-80'
         >
-          <div
-            className='w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin'
-          />
+          <Loading height={5} width={5} />
         </div>
       )}
       <div

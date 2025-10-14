@@ -7,6 +7,7 @@ import { notFound } from 'next/navigation'
 import * as Lucide from 'lucide-react'
 import { Transition } from '@headlessui/react'
 import Link from 'next/link'
+import Loading from '@components/global/Loading'
 
 type Org = Prisma.OrganizationGetPayload<{
   include: {
@@ -72,9 +73,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
           <div
             className='flex items-center rounded-2xl p-5 gap-2'
           >
-            <div
-              className='w-10 h-10 border-4 border-white border-t-transparent rounded-full animate-spin'
-            />
+            <Loading height={10} width={10} />
           </div>
         </div>
       )}
