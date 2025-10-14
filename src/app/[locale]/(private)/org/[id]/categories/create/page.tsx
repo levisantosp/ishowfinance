@@ -29,7 +29,7 @@ export default async function Categories(props: Props) {
 
   return (
     <>
-      <CreateCategoryForm />
+      <CreateCategoryForm id={id} />
     </>
   )
 }
