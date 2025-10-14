@@ -21,7 +21,7 @@
           "ADMIN": "Administrator",
           "MEMBER": "Member"
         },
-        "today_income": "Today's income"
+        "daily_income": "Today's income"
       }
     },
     "org": {
@@ -37,7 +37,7 @@
         }
       },
       "overview": {
-        "today_income": "Today's Income",
+        "daily_income": "Daily Income",
         "week_income": "Weekly Income",
         "month_income": "Monthly Income"
       },
@@ -58,7 +58,13 @@
         "create": {
           "title": "Create a Category",
           "placeholder": "Category name"
-        }
+        },
+        "total": "Total Movement: {total}",
+        "edit": {
+          "title": "Edit Category"
+        },
+        "save": "Save",
+        "create_button": "Create a category"
       }
     }
   },

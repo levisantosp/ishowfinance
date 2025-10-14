@@ -21,7 +21,7 @@
           "ADMIN": "Administrador",
           "MEMBER": "Membro"
         },
-        "today_income": "Renda de hoje"
+        "daily_income": "Renda de hoje"
       }
     },
     "org": {
@@ -37,7 +37,7 @@
         }
       },
       "overview": {
-        "today_income": "Rendas de Hoje",
+        "daily_income": "Rendas de Hoje",
         "week_income": "Rendas da Semana",
         "month_income": "Rendas do Mês"
       },
@@ -58,7 +58,13 @@
         "create": {
           "title": "Criar uma Categoria",
           "placeholder": "Nome da categoria"
-        }
+        },
+        "total": "Movimentação Total: {total}",
+        "edit": {
+          "title": "Editar Categoria"
+        },
+        "save": "Salvar",
+        "create_button": "Criar uma categoria"
       }
     }
   },
