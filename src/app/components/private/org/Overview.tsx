@@ -94,7 +94,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               <div
                 className='relative inline-block cursor-pointer'
               >
-                <Lucide.Logs
+                <Lucide.Ellipsis
                   className='rounded-lg border border-gray-500 p-1'
                   size={30}
                   onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
@@ -194,7 +194,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                 <h2
                   className='text-xl md:text-2xl font-semibold'
                 >
-                  {t('pages.org.overview.today_income')}
+                  {t('pages.org.overview.daily_income')}
                 </h2>
 
                 <span
@@ -210,7 +210,8 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
                           return transactionDate.getDate() === today.getDate() &&
                             transactionDate.getMonth() === today.getMonth() &&
-                            transactionDate.getFullYear() === today.getFullYear()
+                            transactionDate.getFullYear() === today.getFullYear() &&
+                            t.type === 'INCOME'
                         })
                       }))
                       .reduce((sum, category) => {
@@ -258,7 +259,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           startOfWeek.setDate(today.getDate() - today.getDay())
                           startOfWeek.setHours(0, 0, 0, 0)
 
-                          return new Date(t.createdAt) >= startOfWeek
+                          return new Date(t.createdAt) >= startOfWeek && t.type === 'INCOME'
                         })
                       }))
                       .reduce((sum, category) => {
@@ -303,7 +304,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           const today = new Date()
                           const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
 
-                          return new Date(t.createdAt) >= startOfMonth
+                          return new Date(t.createdAt) >= startOfMonth && t.type === 'INCOME'
                         })
                       }))
                       .reduce((sum, category) => {
