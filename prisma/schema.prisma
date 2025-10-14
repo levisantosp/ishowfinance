@@ -20,7 +20,6 @@ model User {
   image         String?
   orgs          Organization[]
   memberIn      Member[]
-  pendingIn     Pending[]
 
   @@map("user")
 }
@@ -37,7 +36,6 @@ model Organization {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
   invite     Invite[]
-  pending    Pending[]
   categories Category[]
 
   @@index([userId])
@@ -81,17 +79,6 @@ model Token {
   @@map("token")
 }
 
-model Pending {
-  id             String       @id @default(uuid())
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-
-  @@index([userId, organizationId])
-  @@map("pending")
-}
-
 model Invite {
   id             String       @id @default(cuid())
   Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
@@ -109,7 +96,7 @@ model Member {
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
   createdAt      DateTime     @default(now())
-  role           Role         @default(MEMBER)
+  role           Role         @default(ADMIN)
   updatedAt      DateTime     @updatedAt
 
   @@index([organizationId, userId])
@@ -170,7 +157,6 @@ model Verification {
 enum Role {
   OWNER
   ADMIN
-  MEMBER
 }
 
 enum TokenType {
