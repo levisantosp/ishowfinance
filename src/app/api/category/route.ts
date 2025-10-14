@@ -78,7 +78,7 @@ export const PATCH = async(req: NextRequest) =>{
   } = await req.json()
 
   await prisma.category.update({
-    where:{
+    where: {
       id: data.id
     },
     data: {
