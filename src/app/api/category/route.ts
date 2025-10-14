@@ -45,7 +45,7 @@ export const POST = async(req: NextRequest) => {
   return NextResponse.json({ ok: true })
 }
 
-export const PATCH = async(req: NextRequest) =>{
+export const PATCH = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
   if(!sessionCookie) {
@@ -89,7 +89,7 @@ export const PATCH = async(req: NextRequest) =>{
   return NextResponse.json({ ok: true })
 }
 
-export const DELETE = async(req: NextRequest) =>{
+export const DELETE = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
 
   if(!sessionCookie) {
