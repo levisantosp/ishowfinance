@@ -39,21 +39,26 @@
       "overview": {
         "today_income": "Rendas de Hoje",
         "week_income": "Rendas da Semana",
-        "month_income": "Rendas do Mês",
-        "summary": {
-          "title": "Resumo Financeiro",
-          "description": "A empresa ganhou {income} e gastou {expense} nos últimos 30 dias"
-        }
+        "month_income": "Rendas do Mês"
       },
       "members": {
         "title": "Membros"
       },
       "menu": {
         "members": "Membros",
-        "edit": "Editar"
+        "edit": "Editar",
+        "categories": "Categorias"
       },
       "edit": {
         "title": "Editar {org}"
+      },
+      "categories": {
+        "no_category": "{org} ainda não possui nenhuma categoria",
+        "title": "Categorias",
+        "create": {
+          "title": "Criar uma Categoria",
+          "placeholder": "Nome da categoria"
+        }
       }
     }
   },

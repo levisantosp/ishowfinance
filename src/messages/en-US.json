@@ -39,21 +39,26 @@
       "overview": {
         "today_income": "Today's Income",
         "week_income": "Weekly Income",
-        "month_income": "Monthly Income",
-        "summary": {
-          "title": "Financial Summary",
-          "description": "The company earned {income} and spent {expense} in the last 30 days"
-        }
+        "month_income": "Monthly Income"
       },
       "members": {
         "title": "Members"
       },
       "menu": {
         "members": "Members",
-        "edit": "Edit"
+        "edit": "Edit",
+        "categories": "Categories"
       },
       "edit": {
         "title": "Edit {org}"
+      },
+      "categories": {
+        "no_category": "{org} does not have any category yet",
+        "title": "Categories",
+        "create": {
+          "title": "Create a Category",
+          "placeholder": "Category name"
+        }
       }
     }
   },
