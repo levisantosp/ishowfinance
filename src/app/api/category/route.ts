@@ -36,7 +36,7 @@ export const POST = async(req: NextRequest) => {
   } = await req.json()
 
   await prisma.category.create({
-    data:{
+    data: {
       name: data.name,
       organizationId: data.id
     }
@@ -81,7 +81,7 @@ export const PATCH = async(req: NextRequest) =>{
     where:{
       id: data.id
     },
-    data:{
+    data: {
       name: data.name
     }
   })
@@ -122,11 +122,10 @@ export const DELETE = async(req: NextRequest) =>{
   } = await req.json()
 
   await prisma.category.delete({
-    where:{
+    where: {
       id: data.id
     }
   })
   
   return NextResponse.json({ ok: true })
 }
-
