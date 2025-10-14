@@ -6,15 +6,23 @@ import { useEffect, useState } from 'react'
 import Loading from '@components/global/Loading'
 import { RiErrorWarningLine } from 'react-icons/ri'
 import { notFound } from 'next/navigation'
+import { useRouter } from '@i18n/navigation'
+import { PackagePlus, Pencil, Trash, Undo2 } from 'lucide-react'
+import Link from 'next/link'
 
 type Props = {
   id: string
   name: string
+  locale: string
 }
 
 type Org = Prisma.OrganizationGetPayload<{
   include: {
-    categories: true
+    categories: {
+      include: {
+        transactions: true
+      }
+    }
   }
 }>
 
@@ -34,7 +42,11 @@ export default function CategoriesOverview(props: Props) {
               id: props.id
             },
             include: {
-              categories: true
+              categories: {
+                include: {
+                  transactions: true
+                }
+              }
             }
           })
         }
@@ -46,22 +58,52 @@ export default function CategoriesOverview(props: Props) {
     findOrg()
   }, [])
 
-  const t = useTranslations()
-
   if(org === null) {
     notFound()
   }
 
+  const t = useTranslations()
+
+  const router = useRouter()
+
   return (
     <>
       <div
-        className='flex justify-center p-10'
+        className='flex flex-col gap-10 justify-center items-center pt-10 pb-5'
       >
+        <div
+          className='absolute left-10 cursor-pointer transition'
+          onClick={() => router.push(`/org/${props.id}/overview`)}
+        >
+          <Undo2
+            className='rounded-lg border border-gray-500 p-1 transition duration-300 hover:bg-[#444444]'
+            size={30}
+          />
+        </div>        
+
         <h1
           className='text-3xl md:text-4xl font-bold'
         >
           {t('pages.org.categories.title')}
         </h1>
+
+        <div
+          className='md:top-35 max-md:top-38'
+        >
+          <Link
+            href={`/org/${props.id}/categories/create`}
+            className='flex gap-1 bg-green-600 p-1 rounded-xl transition hover:bg-green-500 duration-300'
+          >
+            <PackagePlus className='hidden md:block' />
+            <PackagePlus className='block md:hidden' size={20} />
+            
+            <span
+              className='text-sm md:text-base'
+            >
+              {t('pages.org.categories.create_button')}
+            </span>
+          </Link>
+        </div>
       </div>
 
       {org === undefined && (
@@ -94,13 +136,50 @@ export default function CategoriesOverview(props: Props) {
               key={i}
             >
               <div
-                className='border border-gray-500 rounded-2xl w-[40vh] md:w-[110vh] h-20'
+                className='flex justify-between border border-gray-500 rounded-2xl w-[45vh] md:w-[110vh] h-25'
               >
-                <h2
-                  className='font-semibold text-2xl p-5'
+                <div>
+                  <h2
+                    className='font-semibold text-lg md:text-2xl pt-5 px-5'
+                  >
+                    <Link
+                      href={`/${props.locale}/org/${props.id}/categories/${c.id}`}
+                      className='text-blue-400 underline'
+                    >
+                      {c.name}
+                    </Link>
+                  </h2>
+
+                  <span
+                    className='text-gray-400 text-xs md:text-lg px-5'
+                  >
+                    {t.rich('pages.org.categories.total', {
+                      total: (c.transactions.reduce((sum, t) => sum + Number(t.amount), 0))
+                        .toLocaleString(props.locale, {
+                          style: 'currency',
+                          currency: org.currency
+                        })
+                    })}
+                  </span>
+                </div>
+
+                <div
+                  className='flex gap-2 p-5 items-center'
                 >
-                  {c.name}
-                </h2>
+                  <Link
+                    href={`/${props.locale}/org/${props.id}/categories/${c.id}/edit`}
+                  >
+                    <Pencil
+                      size={15}
+                      className='cursor-pointer'
+                    />
+                  </Link>
+
+                  <Trash
+                    size={15}
+                    className='text-red-400 cursor-pointer'
+                  />
+                </div>
               </div>
             </div>
           )) :
