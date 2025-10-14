@@ -44,3 +44,89 @@ export const POST = async(req: NextRequest) => {
   
   return NextResponse.json({ ok: true })
 }
+
+export const PATCH = async(req: NextRequest) =>{
+  const sessionCookie = getSessionCookie(req)
+
+  if(!sessionCookie) {
+    return NextResponse.json(
+      {
+        error: 'You must to be logged in'
+      },
+      {
+        status: 401
+      }
+    )
+  }
+
+  const session = await auth.api.getSession({ headers: req.headers })
+
+  if(!session) {
+    return NextResponse.json(
+      {
+        error: 'You must to be logged in'
+      },
+      {
+        status: 401
+      }
+    )
+  }
+
+  const data: {
+    name: string
+    id: string
+  } = await req.json()
+
+  await prisma.category.update({
+    where:{
+      id: data.id
+    },
+    data:{
+      name: data.name
+    }
+  })
+  
+  return NextResponse.json({ ok: true })
+}
+
+export const DELETE = async(req: NextRequest) =>{
+  const sessionCookie = getSessionCookie(req)
+
+  if(!sessionCookie) {
+    return NextResponse.json(
+      {
+        error: 'You must to be logged in'
+      },
+      {
+        status: 401
+      }
+    )
+  }
+
+  const session = await auth.api.getSession({ headers: req.headers })
+
+  if(!session) {
+    return NextResponse.json(
+      {
+        error: 'You must to be logged in'
+      },
+      {
+        status: 401
+      }
+    )
+  }
+
+  const data: {
+    name: string
+    id: string
+  } = await req.json()
+
+  await prisma.category.delete({
+    where:{
+      id: data.id
+    }
+  })
+  
+  return NextResponse.json({ ok: true })
+}
+
