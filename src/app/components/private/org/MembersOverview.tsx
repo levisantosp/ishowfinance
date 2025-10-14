@@ -83,7 +83,7 @@ export default function MembersOverview(props: Props) {
       {org && (
         <>
           <div
-            className='flex justify-center p-10'
+            className='flex justify-center items-center p-10'
           >
             <div
               className='absolute left-10 cursor-pointer transition'
