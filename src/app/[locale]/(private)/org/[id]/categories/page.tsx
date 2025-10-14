@@ -5,11 +5,14 @@ import { notFound } from 'next/navigation'
 import CategoriesOverview from '@components/private/org/CategoriesOverview'
 
 type Props = {
-  params: Promise<{ id: string }>
+  params: Promise<{
+    id: string
+    locale: string
+  }>
 }
 
 export default async function Categories(props: Props) {
-  const { id } = await props.params
+  const { id, locale } = await props.params
 
   const session = await auth.api.getSession({ headers: await headers() })
 
@@ -32,6 +35,7 @@ export default async function Categories(props: Props) {
       <CategoriesOverview
         id={id}
         name={member.organization.name}
+        locale={locale}
       />
     </>
   )
