@@ -37,10 +37,10 @@ export default function Org({ userId, locale }: Props) {
       .setHours(0, 0, 0, 0)
 
     const startOfNextDay = new Date()
-    
+
     startOfNextDay.setDate(startOfNextDay.getDate() + 1)
     startOfNextDay.setHours(0, 0, 0, 0)
-    
+
     const findOrganizations = async() => {
       const res: {
         organizations: Org[]
@@ -129,16 +129,18 @@ export default function Org({ userId, locale }: Props) {
                 <h3
                   className='font-medium'
                 >
-                  {t('pages.dash.profile.today_income')}
+                  {t('pages.dash.profile.daily_income')}
                 </h3>
 
                 <span
                   className='text-gray-400'
                 >
                   {(org.categories.reduce((sum, category) => {
-                    const total = category.transactions.reduce((csum, transaction) =>
-                      csum + Number(transaction.amount), 0
-                    )
+                    const total = category.transactions
+                      .filter(t => t.type === 'INCOME')
+                      .reduce((csum, transaction) =>
+                        csum + Number(transaction.amount), 0
+                      )
 
                     return sum + total
                   }, 0)).toLocaleString(locale, {
