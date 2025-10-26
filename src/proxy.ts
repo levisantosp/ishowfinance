@@ -1,8 +1,8 @@
-import { NextResponse, type MiddlewareConfig, type NextRequest } from 'next/server'
+import { NextResponse, type ProxyConfig, type NextRequest } from 'next/server'
 import auth from './lib/middlewares/auth.ts'
 import intl from './lib/middlewares/intl.ts'
 
-const middleware = (req: NextRequest) => {
+const proxy = (req: NextRequest) => {
   if(req.nextUrl.pathname.startsWith('/api')) {
     if(
       req.nextUrl.pathname.startsWith('/api/auth/callback/google') ||
@@ -39,8 +39,8 @@ const middleware = (req: NextRequest) => {
   return intlRes
 }
 
-export default middleware
+export default proxy
 
-export const config: MiddlewareConfig = {
+export const config: ProxyConfig = {
   matcher: '/((?!trpc|_next|_vercel|.*\\..*).*)'
 }
