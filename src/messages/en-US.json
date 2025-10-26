@@ -64,7 +64,10 @@
           "title": "Edit Category"
         },
         "save": "Save",
-        "create_button": "Create a category"
+        "create_button": "Create a category",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "confirm": "Are you sure you want do delete this category? You will lost all transaction history linked to it.\nThis action is irreversible."
       }
     }
   },

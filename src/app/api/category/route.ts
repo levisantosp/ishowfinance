@@ -116,10 +116,7 @@ export const DELETE = async(req: NextRequest) => {
     )
   }
 
-  const data: {
-    name: string
-    id: string
-  } = await req.json()
+  const data: { id: string } = await req.json()
 
   await prisma.category.delete({
     where: {

@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES2023",
-    "lib": ["dom", "dom.iterable", "esnext", "ES2023"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "ES2023"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -11,7 +16,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -19,14 +24,28 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@components/*": ["./src/app/components/*"],
-      "@i18n/*": ["./src/i18n/*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@components/*": [
+        "./src/app/components/*"
+      ],
+      "@i18n/*": [
+        "./src/i18n/*"
+      ]
     },
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
     "rewriteRelativeImportExtensions": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
