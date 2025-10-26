@@ -28,35 +28,39 @@ type Org = Prisma.OrganizationGetPayload<{
 
 export default function CategoriesOverview(props: Props) {
   const [org, setOrg] = useState<Org | null>()
+  const [isOpen, setIsOpen] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(false)
+  const [loading, setIsLoading] = useState(false)
+  const [category, setCategory] = useState<string>()
 
   useEffect(() => {
-    const findOrg = async() => {
-      const { organization }: {
-        organization: Org | null
-      } = await (await fetch('/api/org', {
-        headers: {
-          auth: process.env.NEXT_PUBLIC_AUTH,
-          find: 'unique',
-          queryOptions: JSON.stringify({
-            where: {
-              id: props.id
-            },
-            include: {
-              categories: {
-                include: {
-                  transactions: true
-                }
-              }
-            }
-          })
-        }
-      })).json()
-
-      setOrg(organization)
-    }
-
     findOrg()
   }, [])
+
+  const findOrg = async() => {
+    const { organization }: {
+      organization: Org | null
+    } = await (await fetch('/api/org', {
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH,
+        find: 'unique',
+        queryOptions: JSON.stringify({
+          where: {
+            id: props.id
+          },
+          include: {
+            categories: {
+              include: {
+                transactions: true
+              }
+            }
+          }
+        })
+      }
+    })).json()
+
+    setOrg(organization)
+  }
 
   if(org === null) {
     notFound()
@@ -66,8 +70,109 @@ export default function CategoriesOverview(props: Props) {
 
   const router = useRouter()
 
+  const handleDeleteCategory = async() => {
+    if(!category) return
+
+    setIsDisabled(true)
+    setIsLoading(true)
+
+    const res = await fetch('/api/category', {
+      method: 'DELETE',
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH
+      },
+      body: JSON.stringify({ id: category })
+    })
+
+    if(!res.ok) return
+
+    setOrg(currentOrg => {
+      if(!currentOrg) return null
+
+      const categories = currentOrg.categories.filter(c =>
+        c.id !== category
+      )
+
+      return { ...currentOrg, categories }
+    })
+
+    setIsOpen(false)
+    setCategory(undefined)
+    setIsLoading(false)
+    setIsDisabled(false)
+  }
+
   return (
     <>
+      {isOpen && (
+        <div
+          className='fixed inset-0 z-40 bg-black/60'
+        >
+          <div
+            className='
+            w-90 md:w-120
+            h-65 md:h-55
+            flex items-center
+            absolute left-1/2 -translate-x-1/2 translate-y-1/2 rounded-2xl border border-gray-500
+            bg-[#171717]
+            '
+          >
+            <div
+              className='flex flex-col justify-center items-center gap-5 p-5'
+            >
+              <span
+                style={
+                  {
+                    whiteSpace: 'pre-line'
+                  }
+                }
+              >
+                {t('pages.org.categories.confirm')}
+              </span>
+
+              <button
+                type='submit'
+                className='
+              flex w-full rounded-2xl bg-red-500 py-2
+              justify-center items-center text-center
+              transition duration-300 hover:bg-red-400
+              disabled:bg-red-500 disabled:cursor-not-allowed disabled:text-gray-300
+              cursor-pointer
+              '
+                disabled={isDisabled}
+                onClick={handleDeleteCategory}
+              >
+                {loading ? (
+                  <Loading width={5} height={5} />
+                ) : (
+                  <>
+                    {t('pages.org.categories.delete')}
+                  </>
+                )
+                }
+              </button>
+
+              <button
+                type='submit'
+                className='
+              flex w-full rounded-2xl bg-green-500 py-2
+              justify-center items-center text-center
+              transition duration-300 hover:bg-green-400
+              disabled:bg-green-500 disabled:cursor-not-allowed disabled:text-gray-300
+              cursor-pointer
+              '
+                disabled={isDisabled}
+                onClick={() => {
+                  setIsOpen(false)
+                  setCategory(undefined)
+                }}
+              >
+                {t('pages.org.categories.cancel')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <div
         className='flex flex-col gap-10 justify-center items-center pt-10 pb-5'
       >
@@ -178,6 +283,10 @@ export default function CategoriesOverview(props: Props) {
                   <Trash
                     size={15}
                     className='text-red-400 cursor-pointer'
+                    onClick={() => {
+                      isOpen ? setIsOpen(false) : setIsOpen(true)
+                      setCategory(c.id)
+                    }}
                   />
                 </div>
               </div>
