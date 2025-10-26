@@ -42,7 +42,11 @@
         "month_income": "Monthly Income"
       },
       "members": {
-        "title": "Members"
+        "title": "Members",
+        "invite": "Invite People",
+        "copy": "Copy",
+        "invite_url": "Invite URL",
+        "close": "Close"
       },
       "menu": {
         "members": "Members",
@@ -69,6 +73,10 @@
         "cancel": "Cancel",
         "confirm": "Are you sure you want do delete this category? You will lost all transaction history linked to it.\nThis action is irreversible."
       }
+    },
+    "invite": {
+      "unknown_invite": "Unknown invite",
+      "join": "Join"
     }
   },
   "header": {
