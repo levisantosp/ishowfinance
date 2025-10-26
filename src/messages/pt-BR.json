@@ -64,7 +64,10 @@
           "title": "Editar Categoria"
         },
         "save": "Salvar",
-        "create_button": "Criar uma categoria"
+        "create_button": "Criar uma categoria",
+        "delete": "Deletar",
+        "cancel": "Cancelar",
+        "confirm": "Você tem certeza que deseja deletar esta categoria? Você perderá todo histórico de transações ligados à ela.\nEsta ação é irreversível."
       }
     }
   },
