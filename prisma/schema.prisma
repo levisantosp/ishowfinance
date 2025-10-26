@@ -35,7 +35,7 @@ model Organization {
   members    Member[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  invite     Invite[]
+  invites    Invite[]
   categories Category[]
 
   @@index([userId])
@@ -81,7 +81,7 @@ model Token {
 
 model Invite {
   id             String       @id @default(cuid())
-  Organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   expiresAt      DateTime
 
