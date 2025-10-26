@@ -42,7 +42,11 @@
         "month_income": "Rendas do Mês"
       },
       "members": {
-        "title": "Membros"
+        "title": "Membros",
+        "invite": "Convidar Pessoas",
+        "copy": "Copiar",
+        "invite_url": "URL do Convite",
+        "close": "Fechar"        
       },
       "menu": {
         "members": "Membros",
@@ -69,6 +73,10 @@
         "cancel": "Cancelar",
         "confirm": "Você tem certeza que deseja deletar esta categoria? Você perderá todo histórico de transações ligados à ela.\nEsta ação é irreversível."
       }
+    },
+    "invite": {
+      "unknown_invite": "Convite desconhecido",
+      "join": "Join"
     }
   },
   "header": {

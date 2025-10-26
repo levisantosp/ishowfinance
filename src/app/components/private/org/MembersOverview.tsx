@@ -1,12 +1,13 @@
 'use client'
 
 import { Prisma } from '@prisma/client'
-import { Undo2 } from 'lucide-react'
+import { CircleX, Copy, Undo2, UserPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useRouter } from '@i18n/navigation'
+import Loading from '../../global/Loading.tsx'
 
 type Props = {
   id: string
@@ -24,6 +25,10 @@ type Org = Prisma.OrganizationGetPayload<{
 
 export default function MembersOverview(props: Props) {
   const [org, setOrg] = useState<Org | null>()
+  const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [invite, setInvite] = useState<string>()
+  const [isDisabled, setIsDisabled] = useState(false)
 
   useEffect(() => {
     const findOrg = async() => {
@@ -64,8 +69,125 @@ export default function MembersOverview(props: Props) {
 
   const router = useRouter()
 
+  const handleCreateInvite = async() => {
+    setInvite(undefined)
+    setIsLoading(true)
+    setIsOpen(true)
+    setIsDisabled(true)
+
+    const expiresAt = new Date()
+
+    expiresAt.setDate(expiresAt.getDate() + 7)
+
+    const res = await fetch('/api/invite', {
+      method: 'POST',
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH
+      },
+      body: JSON.stringify({ expiresAt, id: props.id })
+    })
+
+    if(res.ok) {
+      const json: { id: string } = await res.json()
+
+      const url = `${process.env.NEXT_PUBLIC_BASE_URL}/invite/${json.id}`
+
+      setInvite(url)
+      setIsLoading(false)
+      setIsDisabled(false)
+    }
+  }
+
+  const handleCopyInvite = async() => {
+    if(!invite) return
+
+    await navigator.clipboard.writeText(invite)
+  }
+
   return (
     <>
+      {isOpen && (
+        <div
+          className='fixed inset-0 z-40 bg-black/60'
+        >
+          <div
+            className='
+            flex items-center
+            absolute left-1/2 -translate-x-1/2 translate-y-1/2 rounded-2xl border border-gray-500
+            bg-[#171717]
+            '
+          >
+            <div
+              className='flex flex-col justify-center items-center gap-5 py-10 px-20'
+            >
+              <span
+                style={
+                  {
+                    whiteSpace: 'pre-line'
+                  }
+                }
+              >
+                {t('pages.org.members.invite_url')}
+              </span>
+
+              {invite && (
+                <span
+                  className='text-blue-400 underline'
+                >
+                  {invite}
+                </span>
+              )}
+
+              <button
+                type='button'
+                className='
+                  flex gap-2 w-full rounded-xl bg-blue-500 p-2
+                  justify-center items-center text-center
+                  transition duration-300 hover:bg-blue-400
+                disabled:bg-blue-500 disabled:cursor-not-allowed disabled:text-gray-300
+                  cursor-pointer
+                '
+                disabled={isDisabled}
+                onClick={handleCopyInvite}
+              >
+                {isLoading ? (
+                  <Loading width={5} height={5} />
+                ) : (
+                  <>
+                    <Copy />
+                    <p>{t('pages.org.members.copy')}</p>
+                  </>
+                )
+                }
+              </button>
+
+              <button
+                type='button'
+                className='
+                  flex gap-2 w-full rounded-xl bg-red-500 p-2
+                  justify-center items-center text-center
+                  transition duration-300 hover:bg-red-400
+                disabled:bg-red-500 disabled:cursor-not-allowed disabled:text-gray-300
+                  cursor-pointer
+                '
+                disabled={isDisabled}
+                onClick={() => setIsOpen(false)}
+              >
+                {isLoading ? (
+                  <Loading width={5} height={5} />
+                ) : (
+                  <>
+                    <CircleX />
+                    <p>{t('pages.org.members.close')}</p>
+                  </>
+                )
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {org === undefined && (
         <div
           className='flex justify-center p-10'
@@ -101,42 +223,65 @@ export default function MembersOverview(props: Props) {
               {t('pages.org.members.title')}
             </h2>
           </div>
-          <div
-            className='flex flex-col gap-5 items-center'
-          >
-            {org.members.map(member => (
+
+        <div
+          className='flex flex-col gap-5'
+        >
+            <div
+              className='flex justify-center items-center md:top-35 max-md:top-38 cursor-pointer'
+              onClick={handleCreateInvite}
+            >
               <div
-                key={member.user.id}
-                className='border border-gray-500 rounded-2xl'
+                className='flex gap-1 bg-green-600 p-2 rounded-xl transition hover:bg-green-500 duration-300'
               >
-                <div
-                  className='px-5 py-2'
+                <UserPlus className='hidden md:block' />
+                <UserPlus className='block md:hidden' size={20} />
+
+                <span
+                  className='text-sm md:text-base'
                 >
-                  <span
-                    className='md:text-lg text-gray-400'
-                  >
-                    {t(`pages.dash.profile.role.${member.role}`)}
-                  </span>
-                </div>
-                <div
-                  className='flex items-center gap-3 mb-5 px-5'
-                >
-                  <Image
-                    src={member.user.image as string}
-                    width={70}
-                    height={70}
-                    alt='profile icon'
-                    className='rounded-full'
-                  />
-                  <h3
-                    className='text-xl md:text-2xl font-semibold'
-                  >
-                    {member.user.name}
-                  </h3>
-                </div>
+                  {t('pages.org.members.invite')}
+                </span>
               </div>
-            ))}
-          </div>
+            </div>
+
+            <div
+              className='flex flex-col gap-5 items-center'
+            >
+              {org.members.map(member => (
+                <div
+                  key={member.user.id}
+                  className='border border-gray-500 rounded-2xl'
+                >
+                  <div
+                    className='px-5 py-2'
+                  >
+                    <span
+                      className='md:text-lg text-gray-400'
+                    >
+                      {t(`pages.dash.profile.role.${member.role}`)}
+                    </span>
+                  </div>
+                  <div
+                    className='flex items-center gap-3 mb-5 px-5'
+                  >
+                    <Image
+                      src={member.user.image as string}
+                      width={70}
+                      height={70}
+                      alt='profile icon'
+                      className='rounded-full'
+                    />
+                    <h3
+                      className='text-xl md:text-2xl font-semibold'
+                    >
+                      {member.user.name}
+                    </h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+        </div>
         </>
       )}
     </>

@@ -125,3 +125,29 @@ export const GET = async(req: NextRequest) => {
     )
   }
 }
+
+export const PUT = async(req: NextRequest) => {
+  const data: {
+    id: string
+    user: string
+    invite: string
+  } = await req.json()
+
+  const org = await prisma.organization.update({
+    where: { id: data.id },
+    data: {
+      members: {
+        create: {
+          userId: data.user
+        }
+      },
+      invites: {
+        delete: {
+          id: data.invite
+        }
+      }
+    }
+  })
+
+  return NextResponse.json({ id: org.id })
+}
