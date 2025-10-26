@@ -284,7 +284,13 @@ export default function CategoriesOverview(props: Props) {
                     size={15}
                     className='text-red-400 cursor-pointer'
                     onClick={() => {
-                      isOpen ? setIsOpen(false) : setIsOpen(true)
+                      if(isOpen) {
+                        setIsOpen(false)
+                      }
+
+                      else {
+                        setIsOpen(true)
+                      }
                       setCategory(c.id)
                     }}
                   />
