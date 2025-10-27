@@ -8,7 +8,7 @@ export default async function InvitePage(props: Props) {
   const params = await props.params
 
   redirect({
-    href: `/`,
+    href: '/',
     locale: params.locale
   })
 }
