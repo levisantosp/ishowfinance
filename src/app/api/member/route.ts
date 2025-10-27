@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { prisma } from '@/lib/prisma'
 
-export const DELETE = async (req: NextRequest) => {
+export const DELETE = async(req: NextRequest) => {
     const data: {
         organization: string
         user: string
