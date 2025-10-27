@@ -224,9 +224,9 @@ export default function MembersOverview(props: Props) {
             </h2>
           </div>
 
-        <div
-          className='flex flex-col gap-5'
-        >
+          <div
+            className='flex flex-col gap-5'
+          >
             <div
               className='flex justify-center items-center md:top-35 max-md:top-38 cursor-pointer'
               onClick={handleCreateInvite}
@@ -281,7 +281,7 @@ export default function MembersOverview(props: Props) {
                 </div>
               ))}
             </div>
-        </div>
+          </div>
         </>
       )}
     </>
