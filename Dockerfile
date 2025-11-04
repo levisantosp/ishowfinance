@@ -1,6 +1,6 @@
-FROM node:22.21.0-alpine
+FROM node:24.11.0-alpine
 
-RUN npm i -g pnpm
+RUN corepack enable pnpm
 
 WORKDIR /app
 
