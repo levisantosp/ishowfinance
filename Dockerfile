@@ -1,4 +1,4 @@
-FROM node:24.11.0-alpine
+FROM node:24.11.1-alpine
 
 RUN corepack enable pnpm
 
@@ -14,4 +14,4 @@ COPY . .
 RUN pnpm build
 RUN pnpm prisma db push
 
-CMD [ "pnpm", "start" ]
+CMD ["pnpm", "start"]
