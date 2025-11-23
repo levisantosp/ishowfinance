@@ -9,7 +9,8 @@ import { Transition } from '@headlessui/react'
 import Link from 'next/link'
 import Loading from '@components/global/Loading'
 import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  BarChart, Bar
 } from 'recharts'
 
 type Org = Prisma.OrganizationGetPayload<{
@@ -40,7 +41,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
         } | null
       } = await (await fetch('/api/org', {
         headers: {
-          auth: process.env.NEXT_PUBLIC_AUTH,
+          auth: process.env.NEXT_PUBLIC_AUTH!,
           find: 'unique',
           queryOptions: JSON.stringify({
             where: { id },
@@ -331,7 +332,10 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               />
             </div>
           </div>
-          <div>
+          
+          {/* Conteúdo dos Gráficos */}
+          <div className='flex flex-col gap-5 px-5 md:px-0 md:max-w-7xl md:mx-auto pb-10'>
+            
             <div
               className='w-full md:mt-0 mt-5 rounded-2xl border border-gray-500 p-5'
             >
@@ -358,7 +362,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                   <Line
                     type='monotone'
                     dataKey='balance'
-                    stroke='#10b981'   // verde maneiro
+                    stroke='#10b981'
                     strokeWidth={3}
                     dot={{ r: 4 }}
                     activeDot={{ r: 6 }}
@@ -366,6 +370,41 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                 </LineChart>
               </ResponsiveContainer>
             </div>
+
+            {/* Novo Gráfico: Lucro Líquido Mensal */}
+            <div
+              className='w-full rounded-2xl border border-gray-500 p-5'
+            >
+              <h2 className='text-xl md:text-2xl font-semibold mb-4'>
+                Lucro Líquido Mensal
+              </h2>
+
+              <ResponsiveContainer width='100%' height={300}>
+                <BarChart
+                  data={[
+                    { name: 'Jan', value: 4500 },
+                    { name: 'Fev', value: 3200 },
+                    { name: 'Mar', value: 5800 },
+                    { name: 'Abr', value: 4100 },
+                    { name: 'Mai', value: 6400 },
+                    { name: 'Jun', value: 7200 }
+                  ]}
+                >
+                  <CartesianGrid strokeDasharray='3 3' stroke='#444' />
+                  <XAxis dataKey='name' stroke='#aaa' />
+                  <YAxis stroke='#aaa' />
+                  <Tooltip 
+                    cursor={{ fill: 'transparent' }} 
+                  />
+                  <Bar
+                    dataKey='value'
+                    fill='#c084fc' // Roxo claro (combinando com o card de renda mensal)
+                    radius={[4, 4, 0, 0]}
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
           </div>
         </>
       )
