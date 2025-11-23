@@ -1,3 +1,6 @@
+// Aqui está o seu componente completo, com o novo gráfico Comparativo Receita x Despesa adicionado e correções para evitar erros de parsing e tipos.
+// Mantive a formatação e estilo gerais do seu arquivo.
+
 'use client'
 
 import { Prisma } from '@prisma/client'
@@ -61,7 +64,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
     }
 
     findOrg()
-  }, [])
+  }, [id])
 
   if(org === null) {
     notFound()
@@ -71,6 +74,43 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
   // Cores para o gráfico de Pizza
   const PIE_COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6']
+
+  // Dados estáticos de exemplo para os gráficos (substitua pelos reais se quiser)
+  const lineData = [
+    { day: '01', balance: 1200 },
+    { day: '02', balance: 1500 },
+    { day: '03', balance: 980 },
+    { day: '04', balance: 2100 },
+    { day: '05', balance: 1800 },
+    { day: '06', balance: 2500 },
+    { day: '07', balance: 3000 }
+  ]
+
+  const monthlyProfit = [
+    { name: 'Jan', value: 4500 },
+    { name: 'Fev', value: 3200 },
+    { name: 'Mar', value: 5800 },
+    { name: 'Abr', value: 4100 },
+    { name: 'Mai', value: 6400 },
+    { name: 'Jun', value: 7200 }
+  ]
+
+  const pieData = [
+    { name: 'Salários', value: 12500 },
+    { name: 'Fornecedores', value: 8400 },
+    { name: 'Vendas', value: 4100 },
+    { name: 'Outros', value: 2000 }
+  ]
+
+  // Novo conjunto de dados para o gráfico Comparativo Receita x Despesa (barras duplas)
+  const revenueExpenseData = [
+    { month: 'Jan', revenue: 8000, expense: 4200 },
+    { month: 'Fev', revenue: 7200, expense: 4000 },
+    { month: 'Mar', revenue: 9600, expense: 3800 },
+    { month: 'Abr', revenue: 8500, expense: 4400 },
+    { month: 'Mai', revenue: 10200, expense: 4800 },
+    { month: 'Jun', revenue: 11500, expense: 4300 }
+  ]
 
   return (
     <>
@@ -336,10 +376,10 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               />
             </div>
           </div>
-          
+
           {/* Conteúdo dos Gráficos */}
           <div className='flex flex-col gap-5 px-5 md:px-0 md:max-w-7xl md:mx-auto pb-10'>
-            
+
             <div
               className='w-full md:mt-0 mt-5 rounded-2xl border border-gray-500 p-5'
             >
@@ -349,15 +389,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
               <ResponsiveContainer width='100%' height={300}>
                 <LineChart
-                  data={[
-                    { day: '01', balance: 1200 },
-                    { day: '02', balance: 1500 },
-                    { day: '03', balance: 980 },
-                    { day: '04', balance: 2100 },
-                    { day: '05', balance: 1800 },
-                    { day: '06', balance: 2500 },
-                    { day: '07', balance: 3000 }
-                  ]}
+                  data={lineData}
                 >
                   <CartesianGrid strokeDasharray='3 3' stroke='#444' />
                   <XAxis dataKey='day' stroke='#aaa' />
@@ -384,14 +416,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
               <ResponsiveContainer width='100%' height={300}>
                 <BarChart
-                  data={[
-                    { name: 'Jan', value: 4500 },
-                    { name: 'Fev', value: 3200 },
-                    { name: 'Mar', value: 5800 },
-                    { name: 'Abr', value: 4100 },
-                    { name: 'Mai', value: 6400 },
-                    { name: 'Jun', value: 7200 }
-                  ]}
+                  data={monthlyProfit}
                 >
                   <CartesianGrid strokeDasharray='3 3' stroke='#444' />
                   <XAxis dataKey='name' stroke='#aaa' />
@@ -419,12 +444,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               <ResponsiveContainer width='100%' height={300}>
                 <PieChart>
                   <Pie
-                    data={[
-                      { name: 'Salários', value: 12500 },
-                      { name: 'Fornecedores', value: 8400 },
-                      { name: 'Vendas', value: 4100 },
-                      { name: 'Outros', value: 2000 },
-                    ]}
+                    data={pieData}
                     cx='50%'
                     cy='50%'
                     innerRadius={60}
@@ -432,12 +452,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                     paddingAngle={5}
                     dataKey='value'
                   >
-                    {[
-                      { name: 'Salários', value: 12500 },
-                      { name: 'Fornecedores', value: 8400 },
-                      { name: 'Vendas', value: 4100 },
-                      { name: 'Outros', value: 2000 },
-                    ].map((entry, index) => (
+                    {pieData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
                     ))}
                   </Pie>
@@ -447,10 +462,33 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               </ResponsiveContainer>
             </div>
 
+            {/* Gráfico Adicionado: Comparativo Receita x Despesa (Barras Duplas) */}
+            <div
+              className='w-full rounded-2xl border border-gray-500 p-5'
+            >
+              <h2 className='text-xl md:text-2xl font-semibold mb-4'>
+                Comparativo Receita x Despesa
+              </h2>
+
+              <ResponsiveContainer width='100%' height={350}>
+                <BarChart
+                  data={revenueExpenseData}
+                  margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+                >
+                  <CartesianGrid strokeDasharray='3 3' stroke='#444' />
+                  <XAxis dataKey='month' stroke='#aaa' />
+                  <YAxis stroke='#aaa' />
+                  <Tooltip formatter={(value: number) => value.toLocaleString(locale, { style: 'currency', currency: org.currency })} />
+                  <Legend />
+                  <Bar dataKey='revenue' name={t('pages.org.charts.revenue') || 'Receita'} fill='#34d399' radius={[4, 4, 0, 0]} />
+                  <Bar dataKey='expense' name={t('pages.org.charts.expense') || 'Despesa'} fill='#f87171' radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
           </div>
         </>
-      )
-      }
+      )}
     </>
   )
 }
