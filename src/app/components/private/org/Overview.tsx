@@ -8,6 +8,9 @@ import * as Lucide from 'lucide-react'
 import { Transition } from '@headlessui/react'
 import Link from 'next/link'
 import Loading from '@components/global/Loading'
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+} from 'recharts'
 
 type Org = Prisma.OrganizationGetPayload<{
   include: {
@@ -327,6 +330,42 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                 size={60}
               />
             </div>
+          </div>
+          <div>
+               <div
+                className="w-full md:mt-0 mt-5 rounded-2xl border border-gray-500 p-5"
+              >
+                <h2 className="text-xl md:text-2xl font-semibold mb-4">
+                  Evolução do Saldo Diário
+                </h2>
+
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart
+                    data={[
+                      { day: "01", balance: 1200 },
+                      { day: "02", balance: 1500 },
+                      { day: "03", balance: 980 },
+                      { day: "04", balance: 2100 },
+                      { day: "05", balance: 1800 },
+                      { day: "06", balance: 2500 },
+                      { day: "07", balance: 3000 }
+                    ]}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" stroke="#444" />
+                    <XAxis dataKey="day" stroke="#aaa" />
+                    <YAxis stroke="#aaa" />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="balance"
+                      stroke="#10b981"   // verde maneiro
+                      strokeWidth={3}
+                      dot={{ r: 4 }}
+                      activeDot={{ r: 6 }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </div>
           </div>
         </>
       )
