@@ -11,7 +11,8 @@ RUN pnpm i --frozen-lockfile
 
 COPY . .
 
-RUN pnpm build
 RUN pnpm prisma db push
+RUN pnpm prisma generate
+RUN pnpm build
 
 CMD ["pnpm", "start"]
