@@ -10,7 +10,8 @@ import Link from 'next/link'
 import Loading from '@components/global/Loading'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  BarChart, Bar
+  BarChart, Bar,
+  PieChart, Pie, Cell, Legend // Adicionado aqui
 } from 'recharts'
 
 type Org = Prisma.OrganizationGetPayload<{
@@ -67,6 +68,9 @@ export default function Overview({ id, locale, isAdmin }: Props) {
   }
 
   const t = useTranslations()
+
+  // Cores para o gráfico de Pizza
+  const PIE_COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6']
 
   return (
     <>
@@ -371,7 +375,6 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               </ResponsiveContainer>
             </div>
 
-            {/* Novo Gráfico: Lucro Líquido Mensal */}
             <div
               className='w-full rounded-2xl border border-gray-500 p-5'
             >
@@ -398,10 +401,49 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                   />
                   <Bar
                     dataKey='value'
-                    fill='#c084fc' // Roxo claro (combinando com o card de renda mensal)
+                    fill='#c084fc'
                     radius={[4, 4, 0, 0]}
                   />
                 </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Novo Gráfico: Despesas por Categoria (Pizza) */}
+            <div
+              className='w-full rounded-2xl border border-gray-500 p-5'
+            >
+              <h2 className='text-xl md:text-2xl font-semibold mb-4'>
+                Despesas por Categoria
+              </h2>
+
+              <ResponsiveContainer width='100%' height={300}>
+                <PieChart>
+                  <Pie
+                    data={[
+                      { name: 'Salários', value: 12500 },
+                      { name: 'Fornecedores', value: 8400 },
+                      { name: 'Vendas', value: 4100 },
+                      { name: 'Outros', value: 2000 },
+                    ]}
+                    cx='50%'
+                    cy='50%'
+                    innerRadius={60}
+                    outerRadius={80}
+                    paddingAngle={5}
+                    dataKey='value'
+                  >
+                    {[
+                      { name: 'Salários', value: 12500 },
+                      { name: 'Fornecedores', value: 8400 },
+                      { name: 'Vendas', value: 4100 },
+                      { name: 'Outros', value: 2000 },
+                    ].map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                  <Legend verticalAlign="middle" align="right" layout="vertical" />
+                </PieChart>
               </ResponsiveContainer>
             </div>
 
