@@ -39,7 +39,14 @@
       "overview": {
         "daily_income": "Daily Income",
         "week_income": "Weekly Income",
-        "month_income": "Monthly Income"
+        "month_income": "Monthly Income",
+        "evolution": "Balance Evolution",
+        "monthly_net_profit": "Monthly Net Profit",
+        "expenses_by_category": "Expenses by Category",
+        "no_data": "No data",
+        "expense": "Expense",
+        "revenue": "Revenue",
+        "comparative": "Expense vs. Revenue Comparative"
       },
       "members": {
         "title": "Members",
