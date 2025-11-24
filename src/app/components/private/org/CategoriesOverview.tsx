@@ -259,7 +259,7 @@ export default function CategoriesOverview(props: Props) {
                     className='text-gray-400 text-xs md:text-lg px-5'
                   >
                     {t.rich('pages.org.categories.total', {
-                      total: (c.transactions.reduce((sum, t) => sum + Number(t.amount), 0))
+                      total: (c.transactions.reduce((sum, t) => sum + Number(t.amount) / 100, 0))
                         .toLocaleString(props.locale, {
                           style: 'currency',
                           currency: org.currency
