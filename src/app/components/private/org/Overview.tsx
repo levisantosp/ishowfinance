@@ -35,7 +35,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const findOrg = async () => {
+    const findOrg = async() => {
       const { organization }: {
         organization: Omit<Org, 'balance'> & {
           balance: string
