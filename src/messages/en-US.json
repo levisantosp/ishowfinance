@@ -61,7 +61,10 @@
         "categories": "Categories"
       },
       "edit": {
-        "title": "Edit {org}"
+        "title": "Edit {org}",
+        "name": "Organization name",
+        "email": "Contact email",
+        "save": "Save changes"
       },
       "categories": {
         "no_category": "{org} does not have any category yet",
