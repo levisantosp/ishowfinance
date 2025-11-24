@@ -39,7 +39,14 @@
       "overview": {
         "daily_income": "Rendas de Hoje",
         "week_income": "Rendas da Semana",
-        "month_income": "Rendas do Mês"
+        "month_income": "Rendas do Mês",
+        "evolution": "Evolução do Saldo",
+        "monthly_net_profit": "Lucro Líquido Mensal",
+        "expenses_by_category": "Despesas por Categoria",
+        "no_data": "Sem dados",
+        "expense": "Despesas",
+        "revenue": "Receitas",
+        "comparative": "Comparativo Depesa x Receita"
       },
       "members": {
         "title": "Membros",
