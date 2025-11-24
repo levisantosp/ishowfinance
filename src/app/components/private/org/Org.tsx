@@ -139,7 +139,7 @@ export default function Org({ userId, locale }: Props) {
                     const total = category.transactions
                       .filter(t => t.type === 'INCOME')
                       .reduce((csum, transaction) =>
-                        csum + Number(transaction.amount), 0
+                        csum + Number(transaction.amount) / 100, 0
                       )
 
                     return sum + total
