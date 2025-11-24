@@ -1,6 +1,6 @@
 'use client'
 
-import { Prisma } from '@prisma/client'
+import { Prisma } from '@generated'
 import { CircleX, Copy, Undo2, UserPlus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
