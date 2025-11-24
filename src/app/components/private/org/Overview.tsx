@@ -1,6 +1,6 @@
 'use client'
 
-import { Prisma } from '@prisma/client'
+import { Prisma } from '@generated'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState, useMemo } from 'react'
 import { notFound } from 'next/navigation'

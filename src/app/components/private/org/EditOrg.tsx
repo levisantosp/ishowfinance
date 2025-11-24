@@ -1,6 +1,6 @@
 'use client'
 
-import { Prisma } from '@prisma/client'
+import { Prisma } from '@generated'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import Loading from '../../global/Loading.tsx'
@@ -27,7 +27,7 @@ export function EditOrg(props: Props) {
           })
         }
       })).json()
-      
+
       setOrg(organization)
     }
 

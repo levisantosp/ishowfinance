@@ -1,6 +1,6 @@
 'use client'
 
-import { Prisma } from '@prisma/client'
+import { Prisma } from '@generated'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import Loading from '@components/global/Loading'
@@ -184,7 +184,7 @@ export default function CategoriesOverview(props: Props) {
             className='rounded-lg border border-gray-500 p-1 transition duration-300 hover:bg-[#444444]'
             size={30}
           />
-        </div>        
+        </div>
 
         <h1
           className='text-3xl md:text-4xl font-bold'
@@ -201,7 +201,7 @@ export default function CategoriesOverview(props: Props) {
           >
             <PackagePlus className='hidden md:block' />
             <PackagePlus className='block md:hidden' size={20} />
-            
+
             <span
               className='text-sm md:text-base'
             >
@@ -212,7 +212,7 @@ export default function CategoriesOverview(props: Props) {
       </div>
 
       {org === undefined && (
-        <Loading width={10} height={10}/>
+        <Loading width={10} height={10} />
       )}
 
       {org?.categories.length === 0 && (
@@ -230,7 +230,7 @@ export default function CategoriesOverview(props: Props) {
           </span>
         </div>
       )}
-      
+
       <div
         className='flex flex-col items-center gap-10'
       >

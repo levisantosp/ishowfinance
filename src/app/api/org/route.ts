@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { getSessionCookie } from 'better-auth/cookies'
 import { auth } from '@/lib/auth'
-import { $Enums } from '@prisma/client'
+import type { $Enums } from '@generated'
 
 export const POST = async(req: NextRequest) => {
   const sessionCookie = getSessionCookie(req)
