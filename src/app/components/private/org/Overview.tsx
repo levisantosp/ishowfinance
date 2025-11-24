@@ -1,11 +1,8 @@
-// Aqui está o seu componente completo, com o novo gráfico Comparativo Receita x Despesa adicionado e correções para evitar erros de parsing e tipos.
-// Mantive a formatação e estilo gerais do seu arquivo.
-
 'use client'
 
 import { Prisma } from '@prisma/client'
 import { useTranslations } from 'next-intl'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { notFound } from 'next/navigation'
 import * as Lucide from 'lucide-react'
 import { Transition } from '@headlessui/react'
@@ -14,7 +11,7 @@ import Loading from '@components/global/Loading'
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   BarChart, Bar,
-  PieChart, Pie, Cell, Legend // Adicionado aqui
+  PieChart, Pie, Cell, Legend
 } from 'recharts'
 
 type Org = Prisma.OrganizationGetPayload<{
@@ -38,7 +35,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
   const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
-    const findOrg = async() => {
+    const findOrg = async () => {
       const { organization }: {
         organization: Omit<Org, 'balance'> & {
           balance: string
@@ -72,45 +69,93 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
   const t = useTranslations()
 
-  // Cores para o gráfico de Pizza
-  const PIE_COLORS = ['#ef4444', '#f59e0b', '#3b82f6', '#8b5cf6']
+  const allTransactions = useMemo(() => {
+    if(!org) return []
+    return org.categories.flatMap(cat =>
+      cat.transactions.map(tr => ({
+        ...tr,
+        amount: Number(tr.amount) / 100,
+        date: new Date(tr.createdAt),
+        categoryName: cat.name
+      }))
+    )
+  }, [org])
 
-  // Dados estáticos de exemplo para os gráficos (substitua pelos reais se quiser)
-  const lineData = [
-    { day: '01', balance: 1200 },
-    { day: '02', balance: 1500 },
-    { day: '03', balance: 980 },
-    { day: '04', balance: 2100 },
-    { day: '05', balance: 1800 },
-    { day: '06', balance: 2500 },
-    { day: '07', balance: 3000 }
-  ]
+  const lineData = useMemo(() => {
+    if(!org) return []
+    const days = []
+    const today = new Date()
 
-  const monthlyProfit = [
-    { name: 'Jan', value: 4500 },
-    { name: 'Fev', value: 3200 },
-    { name: 'Mar', value: 5800 },
-    { name: 'Abr', value: 4100 },
-    { name: 'Mai', value: 6400 },
-    { name: 'Jun', value: 7200 }
-  ]
+    for(let i = 6;i >= 0;i--) {
+      const d = new Date()
+      d.setDate(today.getDate() - i)
+      const dayStr = d.getDate().toString().padStart(2, '0')
 
-  const pieData = [
-    { name: 'Salários', value: 12500 },
-    { name: 'Fornecedores', value: 8400 },
-    { name: 'Vendas', value: 4100 },
-    { name: 'Outros', value: 2000 }
-  ]
+      const dailyTotal = allTransactions
+        .filter(t =>
+          t.date.getDate() === d.getDate() &&
+          t.date.getMonth() === d.getMonth() &&
+          t.date.getFullYear() === d.getFullYear()
+        )
+        .reduce((acc, curr) => {
+          return curr.type === 'INCOME' ? acc + curr.amount : acc - curr.amount
+        }, 0)
 
-  // Novo conjunto de dados para o gráfico Comparativo Receita x Despesa (barras duplas)
-  const revenueExpenseData = [
-    { month: 'Jan', revenue: 8000, expense: 4200 },
-    { month: 'Fev', revenue: 7200, expense: 4000 },
-    { month: 'Mar', revenue: 9600, expense: 3800 },
-    { month: 'Abr', revenue: 8500, expense: 4400 },
-    { month: 'Mai', revenue: 10200, expense: 4800 },
-    { month: 'Jun', revenue: 11500, expense: 4300 }
-  ]
+      days.push({ day: dayStr, balance: dailyTotal })
+    }
+    return days
+  }, [allTransactions, org])
+
+  const { monthlyProfit, revenueExpenseData } = useMemo(() => {
+    const profitData = []
+    const comparisonData = []
+    const today = new Date()
+
+    for(let i = 5;i >= 0;i--) {
+      const d = new Date(today.getFullYear(), today.getMonth() - i, 1)
+      const monthName = d.toLocaleString(locale, { month: 'short' })
+
+      const transactionsInMonth = allTransactions.filter(t =>
+        t.date.getMonth() === d.getMonth() &&
+        t.date.getFullYear() === d.getFullYear()
+      )
+
+      const income = transactionsInMonth
+        .filter(t => t.type === 'INCOME')
+        .reduce((acc, t) => acc + t.amount, 0)
+
+      const expense = transactionsInMonth
+        .filter(t => t.type === 'EXPENSE')
+        .reduce((acc, t) => acc + t.amount, 0)
+
+      profitData.push({ name: monthName, value: income - expense })
+      comparisonData.push({ month: monthName, revenue: income, expense: expense })
+    }
+
+    return { monthlyProfit: profitData, revenueExpenseData: comparisonData }
+  }, [allTransactions, locale])
+
+  const pieData = useMemo(() => {
+    const expensesByCategory: Record<string, number> = {}
+
+    allTransactions
+      .filter(t => t.type === 'EXPENSE')
+      .forEach(t => {
+        if(!expensesByCategory[t.categoryName]) {
+          expensesByCategory[t.categoryName] = 0
+        }
+        expensesByCategory[t.categoryName] += t.amount
+      })
+
+    return Object.entries(expensesByCategory).map(([name, value]) => {
+      const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 60%)`
+      return {
+        name,
+        value,
+        fill: randomColor
+      }
+    })
+  }, [allTransactions])
 
   return (
     <>
@@ -267,7 +312,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           csum + Number(transaction.amount), 0
                         )
 
-                        return sum + total
+                        return sum + (total / 100)
                       }, 0))
                       .toLocaleString(locale, {
                         style: 'currency',
@@ -315,7 +360,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           csum + Number(transaction.amount), 0
                         )
 
-                        return sum + total
+                        return sum + (total / 100)
                       }, 0))
                       .toLocaleString(locale, {
                         style: 'currency',
@@ -360,7 +405,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           csum + Number(transaction.amount), 0
                         )
 
-                        return sum + total
+                        return sum + (total / 100)
                       }, 0))
                       .toLocaleString(locale, {
                         style: 'currency',
@@ -377,14 +422,13 @@ export default function Overview({ id, locale, isAdmin }: Props) {
             </div>
           </div>
 
-          {/* Conteúdo dos Gráficos */}
-          <div className='flex flex-col gap-5 px-5 md:px-0 md:max-w-7xl md:mx-auto pb-10'>
+          <div className='flex flex-col gap-5 px-5 md:px-0 md:max-w-7xl md:mx-auto pb-10 pt-10'>
 
             <div
               className='w-full md:mt-0 mt-5 rounded-2xl border border-gray-500 p-5'
             >
               <h2 className='text-xl md:text-2xl font-semibold mb-4'>
-                Evolução do Saldo Diário
+                {t('pages.org.overview.evolution')}
               </h2>
 
               <ResponsiveContainer width='100%' height={300}>
@@ -394,7 +438,10 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                   <CartesianGrid strokeDasharray='3 3' stroke='#444' />
                   <XAxis dataKey='day' stroke='#aaa' />
                   <YAxis stroke='#aaa' />
-                  <Tooltip />
+                  <Tooltip
+                    formatter={(value: number) => value.toLocaleString(locale, { style: 'currency', currency: org.currency })}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151' }}
+                  />
                   <Line
                     type='monotone'
                     dataKey='balance'
@@ -411,7 +458,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               className='w-full rounded-2xl border border-gray-500 p-5'
             >
               <h2 className='text-xl md:text-2xl font-semibold mb-4'>
-                Lucro Líquido Mensal
+                {t('pages.org.overview.monthly_net_profit')}
               </h2>
 
               <ResponsiveContainer width='100%' height={300}>
@@ -421,8 +468,10 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                   <CartesianGrid strokeDasharray='3 3' stroke='#444' />
                   <XAxis dataKey='name' stroke='#aaa' />
                   <YAxis stroke='#aaa' />
-                  <Tooltip 
-                    cursor={{ fill: 'transparent' }} 
+                  <Tooltip
+                    cursor={{ fill: 'rgba(255,255,255,0.1)' }}
+                    formatter={(value: number) => value.toLocaleString(locale, { style: 'currency', currency: org.currency })}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151' }}
                   />
                   <Bar
                     dataKey='value'
@@ -433,41 +482,44 @@ export default function Overview({ id, locale, isAdmin }: Props) {
               </ResponsiveContainer>
             </div>
 
-            {/* Novo Gráfico: Despesas por Categoria (Pizza) */}
             <div
               className='w-full rounded-2xl border border-gray-500 p-5'
             >
               <h2 className='text-xl md:text-2xl font-semibold mb-4'>
-                Despesas por Categoria
+                {t('pages.org.overview.expenses_by_category')}
               </h2>
-
-              <ResponsiveContainer width='100%' height={300}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx='50%'
-                    cy='50%'
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
-                    dataKey='value'
-                  >
-                    {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={PIE_COLORS[index % PIE_COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                  <Legend verticalAlign="middle" align="right" layout="vertical" />
-                </PieChart>
-              </ResponsiveContainer>
+              {pieData.length > 0 ? (
+                <ResponsiveContainer width='100%' height={300}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx='50%'
+                      cy='50%'
+                      innerRadius={60}
+                      outerRadius={80}
+                      paddingAngle={5}
+                      dataKey='value'
+                    >
+                      {pieData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: number) => value.toLocaleString(locale, { style: 'currency', currency: org.currency })} />
+                    <Legend verticalAlign='middle' align='right' layout='vertical' />
+                  </PieChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className='h-[300px] flex items-center justify-center text-gray-500'>
+                  {t('pages.org.overview.no_data')}
+                </div>
+              )}
             </div>
 
-            {/* Gráfico Adicionado: Comparativo Receita x Despesa (Barras Duplas) */}
             <div
               className='w-full rounded-2xl border border-gray-500 p-5'
             >
               <h2 className='text-xl md:text-2xl font-semibold mb-4'>
-                Comparativo Receita x Despesa
+                {t('pages.org.overview.comparative')}
               </h2>
 
               <ResponsiveContainer width='100%' height={350}>
@@ -478,14 +530,16 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                   <CartesianGrid strokeDasharray='3 3' stroke='#444' />
                   <XAxis dataKey='month' stroke='#aaa' />
                   <YAxis stroke='#aaa' />
-                  <Tooltip formatter={(value: number) => value.toLocaleString(locale, { style: 'currency', currency: org.currency })} />
+                  <Tooltip
+                    formatter={(value: number) => value.toLocaleString(locale, { style: 'currency', currency: org.currency })}
+                    contentStyle={{ backgroundColor: '#1f2937', borderColor: '#374151' }}
+                  />
                   <Legend />
-                  <Bar dataKey='revenue' name={t('pages.org.charts.revenue') || 'Receita'} fill='#34d399' radius={[4, 4, 0, 0]} />
-                  <Bar dataKey='expense' name={t('pages.org.charts.expense') || 'Despesa'} fill='#f87171' radius={[4, 4, 0, 0]} />
+                  <Bar dataKey='revenue' name={t('pages.org.overview.revenue')} fill='#34d399' radius={[4, 4, 0, 0]} />
+                  <Bar dataKey='expense' name={t('pages.org.overview.expense')} fill='#f87171' radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
-
           </div>
         </>
       )}
