@@ -21,7 +21,7 @@
           "ADMIN": "Administrador",
           "MEMBER": "Membro"
         },
-        "daily_income": "Renda de hoje"
+        "daily_revenue": "Receita de hoje"
       }
     },
     "org": {
@@ -37,9 +37,9 @@
         }
       },
       "overview": {
-        "daily_income": "Rendas de Hoje",
-        "week_income": "Rendas da Semana",
-        "month_income": "Rendas do Mês",
+        "daily_revenue": "Receitas de Hoje",
+        "week_revenue": "Receitas da Semana",
+        "month_revenue": "Receitas do Mês",
         "evolution": "Evolução do Saldo",
         "monthly_net_profit": "Lucro Líquido Mensal",
         "expenses_by_category": "Despesas por Categoria",
@@ -53,12 +53,13 @@
         "invite": "Convidar Pessoas",
         "copy": "Copiar",
         "invite_url": "URL do Convite",
-        "close": "Fechar"        
+        "close": "Fechar"
       },
       "menu": {
         "members": "Membros",
         "edit": "Editar",
-        "categories": "Categorias"
+        "categories": "Categorias",
+        "create_transaction": "Criar uma transação"
       },
       "edit": {
         "title": "Editar {org}",
@@ -82,6 +83,23 @@
         "delete": "Deletar",
         "cancel": "Cancelar",
         "confirm": "Você tem certeza que deseja deletar esta categoria? Você perderá todo histórico de transações ligados à ela.\nEsta ação é irreversível."
+      },
+      "transaction": {
+        "create": {
+          "title": "Criar uma Transação",
+          "transaction_title": "Título",
+          "transaction_description": "Descrição",
+          "transaction_amount": "Quantia (apenas números)",
+          "transaction_date": "Data e hora da transação",
+          "select_category": "Selecione uma categoria",
+          "success": "Transação criada com sucesso!",
+          "type": {
+            "REVENUE": "Receita",
+            "EXPENSE": "Despesa"
+          }
+        },
+        "submit": "Criar",
+        "cancel": "Cancelar"
       }
     },
     "invite": {
@@ -97,6 +115,6 @@
     }
   },
   "utils": {
-    "loading": "Carregando informações"
+    "error": "Ocorreu um erro inesperado..."
   }
 }

@@ -1,7 +1,7 @@
 {
   "metadata": {
     "title": "ishowfinance | Financial Management for Businesses",
-    "description": "IShowFinance is a financial management platform for businesses. Record income and expenses automatically or manually, manage team members, and track real-time reports to strengthen your company’s financial health."
+    "description": "IShowFinance is a financial management platform for businesses. Record revenue and expenses automatically or manually, manage team members, and track real-time reports to strengthen your company’s financial health."
   },
   "pages": {
     "login": {
@@ -21,7 +21,7 @@
           "ADMIN": "Administrator",
           "MEMBER": "Member"
         },
-        "daily_income": "Today's income"
+        "daily_revenue": "Today's revenue"
       }
     },
     "org": {
@@ -37,9 +37,9 @@
         }
       },
       "overview": {
-        "daily_income": "Daily Income",
-        "week_income": "Weekly Income",
-        "month_income": "Monthly Income",
+        "daily_revenue": "Daily revenue",
+        "week_revenue": "Weekly revenue",
+        "month_revenue": "Monthly revenue",
         "evolution": "Balance Evolution",
         "monthly_net_profit": "Monthly Net Profit",
         "expenses_by_category": "Expenses by Category",
@@ -58,7 +58,8 @@
       "menu": {
         "members": "Members",
         "edit": "Edit",
-        "categories": "Categories"
+        "categories": "Categories",
+        "create_transaction": "Create a transaction"
       },
       "edit": {
         "title": "Edit {org}",
@@ -82,6 +83,23 @@
         "delete": "Delete",
         "cancel": "Cancel",
         "confirm": "Are you sure you want do delete this category? You will lost all transaction history linked to it.\nThis action is irreversible."
+      },
+      "transaction": {
+        "create": {
+          "title": "Create a Transaction",
+          "transaction_title": "Title",
+          "transaction_description": "Description",
+          "transaction_amount": "Amount (only numbers)",
+          "transaction_date": "Transaction date time",
+          "select_category": "Select category",
+          "success": "Transaction created successfully!",
+          "type": {
+            "REVENUE": "Revenue",
+            "EXPENSE": "Expense"
+          }
+        },
+        "submit": "Create",
+        "cancel": "Cancel"
       }
     },
     "invite": {
@@ -97,6 +115,6 @@
     }
   },
   "utils": {
-    "loading": "Loading information"
+    "error": "An unexpected error has occurred..."
   }
 }
