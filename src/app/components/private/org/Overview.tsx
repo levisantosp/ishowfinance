@@ -13,6 +13,7 @@ import {
   BarChart, Bar,
   PieChart, Pie, Cell, Legend
 } from 'recharts'
+import { toast } from 'sonner'
 
 type Org = Prisma.OrganizationGetPayload<{
   include: {
@@ -30,9 +31,28 @@ type Props = {
   isAdmin: boolean
 }
 
+const transactionTypes = ['REVENUE', 'EXPENSE'] as const
+
 export default function Overview({ id, locale, isAdmin }: Props) {
   const [org, setOrg] = useState<Org | null>()
   const [isOpen, setIsOpen] = useState(false)
+  const [isTransactionMenuOpen, setIsTransactionMenuOpen] = useState(false)
+  const [transactionTitle, setTransactionTitle] = useState<string>()
+  const [transactionDescription, setTransactionDescription] = useState<string>()
+  const [transactionAmount, setTransactionAmount] = useState<string>()
+  const [transactionDate, setTransactionDate] = useState<string>()
+  const [transactionCategory, setTransactionCategory] = useState<string>()
+  const [transactionType, setTransactionType] = useState<string>(transactionTypes[0])
+  const [isLoading, setIsLoading] = useState(false)
+
+  const isDisabled = (!transactionTitle || !transactionTitle.length)
+    || (
+      !transactionAmount
+      || !transactionAmount.length
+      || transactionAmount === '0'
+    )
+    || isLoading
+    || !transactionCategory
 
   useEffect(() => {
     const findOrg = async() => {
@@ -58,6 +78,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
       })).json()
 
       setOrg(organization)
+      setTransactionCategory(organization?.categories[0].id)
     }
 
     findOrg()
@@ -69,8 +90,78 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
   const t = useTranslations()
 
+  const handleTransactionClick = async() => {
+    setIsTransactionMenuOpen(true)
+  }
+
+  const handleTransactionSubmit = async() => {
+    setIsLoading(true)
+
+    const res = await fetch('/api/category', {
+      method: 'PUT',
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH
+      },
+      body: JSON.stringify({
+        title: transactionTitle,
+        description: transactionDescription,
+        date: !transactionDate
+          ? undefined
+          : new Date(transactionDate).toISOString(),
+        amount: transactionAmount,
+        category: transactionCategory,
+        type: transactionType
+      })
+    })
+
+    if(!res.ok) {
+      setIsLoading(false)
+      
+      return toast.error(t('utils.error'), {
+        description: res.statusText
+      })
+    }
+
+    setIsTransactionMenuOpen(false)
+    setTransactionTitle(undefined)
+    setTransactionDescription(undefined)
+    setTransactionAmount(undefined)
+    setTransactionDate(undefined)
+    setIsLoading(false)
+
+    toast.success(t('pages.org.transaction.create.success'))
+  }
+
+  const handleTransactionCancel = async() => {
+    setIsTransactionMenuOpen(false)
+    setTransactionTitle(undefined)
+    setTransactionDescription(undefined)
+    setTransactionAmount(undefined)
+    setTransactionDate(undefined)
+    setIsLoading(false)
+  }
+
+  const formatCurrency = (value: string | undefined) => {
+    if(!value?.length || value === '0') return ''
+
+    const amount = (Number(value) / 100).toFixed(2)
+
+    return new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency: org?.currency
+    }).format(Number(amount))
+  }
+
+  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const numericValue = event.target.value.replace(/\D/g, '')
+    const amount = parseInt(numericValue || '0', 10)
+
+    setTransactionAmount(amount.toString())
+  }
+
   const allTransactions = useMemo(() => {
     if(!org) return []
+
     return org.categories.flatMap(cat =>
       cat.transactions.map(tr => ({
         ...tr,
@@ -83,6 +174,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
   const lineData = useMemo(() => {
     if(!org) return []
+
     const days = []
     const today = new Date()
 
@@ -98,7 +190,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
           t.date.getFullYear() === d.getFullYear()
         )
         .reduce((acc, curr) => {
-          return curr.type === 'INCOME' ? acc + curr.amount : acc - curr.amount
+          return curr.type === 'REVENUE' ? acc + curr.amount : acc - curr.amount
         }, 0)
 
       days.push({ day: dayStr, balance: dailyTotal })
@@ -120,16 +212,16 @@ export default function Overview({ id, locale, isAdmin }: Props) {
         t.date.getFullYear() === d.getFullYear()
       )
 
-      const income = transactionsInMonth
-        .filter(t => t.type === 'INCOME')
+      const revenue = transactionsInMonth
+        .filter(t => t.type === 'REVENUE')
         .reduce((acc, t) => acc + t.amount, 0)
 
       const expense = transactionsInMonth
         .filter(t => t.type === 'EXPENSE')
         .reduce((acc, t) => acc + t.amount, 0)
 
-      profitData.push({ name: monthName, value: income - expense })
-      comparisonData.push({ month: monthName, revenue: income, expense: expense })
+      profitData.push({ name: monthName, value: revenue - expense })
+      comparisonData.push({ month: monthName, revenue: revenue, expense: expense })
     }
 
     return { monthlyProfit: profitData, revenueExpenseData: comparisonData }
@@ -171,6 +263,153 @@ export default function Overview({ id, locale, isAdmin }: Props) {
         </div>
       )}
 
+      {isTransactionMenuOpen && (
+        <div
+          className='fixed inset-0 z-40 bg-black/60 flex items-center justify-center'
+        >
+          <div
+            className='
+              flex flex-col items-center
+              rounded-2xl border border-gray-500
+              bg-[#171717]
+            '
+          >
+            <div
+              className='flex flex-col justify-center items-center gap-5 py-10 px-20'
+            >
+              <h3
+                style={
+                  {
+                    whiteSpace: 'pre-line'
+                  }
+                }
+                className='text-center text-xl md:text-2xl font-bold'
+              >
+                {t('pages.org.transaction.create.title')}
+              </h3>
+
+              <form
+                className='flex flex-col gap-5 relative max-w-md md:w-full'
+                onSubmit={handleTransactionSubmit}
+              >
+                <input
+                  type='text'
+                  placeholder={t('pages.org.transaction.create.transaction_title')}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                  name='title'
+                  value={transactionTitle}
+                  onChange={(input) => setTransactionTitle(input.target.value)}
+                  autoComplete='off'
+                />
+
+                <textarea
+                  placeholder={t('pages.org.transaction.create.transaction_description')}
+                  className='
+                    w-full rounded-2xl border border-gray-500 pl-4 py-4
+                    h-40
+                  '
+                  name='description'
+                  value={transactionDescription}
+                  onChange={(input) => setTransactionDescription(input.target.value)}
+                  autoComplete='off'
+                />
+
+                <input
+                  type='text'
+                  placeholder={t('pages.org.transaction.create.transaction_amount')}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2 px-30'
+                  name='value'
+                  value={formatCurrency(transactionAmount || '0')}
+                  onChange={handleAmountChange}
+                  autoComplete='off'
+                />
+
+                <select
+                  name='category'
+                  value={transactionCategory}
+                  onChange={(input) => setTransactionCategory(input.target.value)}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                >
+                  {
+                    org?.categories.map(c => (
+                      <option
+                        key={c.id}
+                        value={c.id}
+                        className='rounded-2xl bg-[#171717]'
+                      >
+                        {c.name}
+                      </option>
+                    ))
+                  }
+                </select>
+
+                <select
+                  name='type'
+                  value={transactionType}
+                  onChange={(input) => setTransactionType(input.target.value)}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                >
+                  {
+                    transactionTypes.map(c => (
+                      <option
+                        key={c}
+                        value={c}
+                        className='rounded-2xl bg-[#171717]'
+                      >
+                        {t(`pages.org.transaction.create.type.${c}`)}
+                      </option>
+                    ))
+                  }
+                </select>
+
+                <input
+                  type='datetime-local'
+                  placeholder={t('pages.org.transaction.create.transaction_date')}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                  name='date'
+                  value={transactionDate}
+                  onChange={(input) => setTransactionDate(input.target.value)}
+                  autoComplete='off'
+                />
+              </form>
+
+              <button
+                type='submit'
+                className='
+                  flex w-full rounded-2xl bg-green-700 py-2
+                  justify-center items-center text-center mt-5
+                  transition duration-300 hover:bg-green-600
+                disabled:bg-green-900 disabled:cursor-not-allowed disabled:text-gray-300
+                  cursor-pointer
+                '
+                disabled={isDisabled}
+                onClick={handleTransactionSubmit}
+              >
+                {
+                  isLoading ? (
+                    <Loading width={5} height={5} />
+                  )
+                    : t('pages.org.transaction.submit')
+                }
+              </button>
+
+              <button
+                type='button'
+                className='
+                  flex w-full rounded-2xl bg-red-500 py-2
+                  justify-center items-center text-center mt-5
+                  transition duration-300 hover:bg-red-400
+                  cursor-pointer
+                '
+                onClick={handleTransactionCancel}
+              >
+                {t('pages.org.transaction.cancel')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {org && (
         <>
           <div
@@ -205,7 +444,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                   <div
                     className='
                     flex flex-col border border-gray-500
-                    absolute top-12 right-0 w-50 z-20
+                    absolute top-12 right-0 w-60 z-20
                     rounded-2xl
                   bg-[#171717]
                     '
@@ -271,16 +510,16 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                         </span>
                       </Link>
                     </div>
+
                     <div
                       className='
                       cursor-pointer
                       transition duration-300 hover:bg-[#444444]
                       rounded-2xl px-4 py-2
                       '
-                      onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
+                      onClick={handleTransactionClick}
                     >
-                      <Link
-                        href={`/${locale}/org/${id}/members`}
+                      <div
                         className='flex gap-2'
                       >
                         <Lucide.CircleDollarSign color='#99a1af' />
@@ -288,9 +527,8 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                         <span>
                           {t('pages.org.menu.create_transaction')}
                         </span>
-                      </Link>
+                      </div>
                     </div>
-
                   </div>
                 </Transition>
               </div>
@@ -307,7 +545,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                 <h2
                   className='text-xl md:text-2xl font-semibold'
                 >
-                  {t('pages.org.overview.daily_income')}
+                  {t('pages.org.overview.daily_revenue')}
                 </h2>
 
                 <span
@@ -324,7 +562,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           return transactionDate.getDate() === today.getDate() &&
                             transactionDate.getMonth() === today.getMonth() &&
                             transactionDate.getFullYear() === today.getFullYear() &&
-                            t.type === 'INCOME'
+                            t.type === 'REVENUE'
                         })
                       }))
                       .reduce((sum, category) => {
@@ -355,7 +593,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                 <h2
                   className='text-xl md:text-2xl font-semibold'
                 >
-                  {t('pages.org.overview.week_income')}
+                  {t('pages.org.overview.week_revenue')}
                 </h2>
 
                 <span
@@ -372,7 +610,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           startOfWeek.setDate(today.getDate() - today.getDay())
                           startOfWeek.setHours(0, 0, 0, 0)
 
-                          return new Date(t.createdAt) >= startOfWeek && t.type === 'INCOME'
+                          return new Date(t.createdAt) >= startOfWeek && t.type === 'REVENUE'
                         })
                       }))
                       .reduce((sum, category) => {
@@ -403,7 +641,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                 <h2
                   className='text-xl md:text-2xl font-semibold'
                 >
-                  {t('pages.org.overview.month_income')}
+                  {t('pages.org.overview.month_revenue')}
                 </h2>
 
                 <span
@@ -417,7 +655,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                           const today = new Date()
                           const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1)
 
-                          return new Date(t.createdAt) >= startOfMonth && t.type === 'INCOME'
+                          return new Date(t.createdAt) >= startOfMonth && t.type === 'REVENUE'
                         })
                       }))
                       .reduce((sum, category) => {
