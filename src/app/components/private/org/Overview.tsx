@@ -271,6 +271,26 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                         </span>
                       </Link>
                     </div>
+                    <div
+                      className='
+                      cursor-pointer
+                      transition duration-300 hover:bg-[#444444]
+                      rounded-2xl px-4 py-2
+                      '
+                      onClick={() => isOpen ? setIsOpen(false) : setIsOpen(true)}
+                    >
+                      <Link
+                        href={`/${locale}/org/${id}/members`}
+                        className='flex gap-2'
+                      >
+                        <Lucide.CircleDollarSign color='#99a1af' />
+
+                        <span>
+                          {t('pages.org.menu.create_transaction')}
+                        </span>
+                      </Link>
+                    </div>
+
                   </div>
                 </Transition>
               </div>
