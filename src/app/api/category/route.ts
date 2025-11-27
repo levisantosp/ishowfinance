@@ -117,3 +117,60 @@ export const PUT = async(req: NextRequest) => {
     )
   }
 }
+
+export const GET = async(req: NextRequest) => {
+  try {
+    const queryOptions = req.headers.get('queryOptions')
+
+    if(!queryOptions) {
+      return NextResponse.json(
+        { message: '"queryOptions" must be provided' },
+        { status: 400 }
+      )
+    }
+
+    const parsedQueryOptions: {
+      categoryId?: string
+      organizationId?: string
+    } = JSON.parse(queryOptions)
+
+    if(!parsedQueryOptions.categoryId || !parsedQueryOptions.organizationId) {
+      return NextResponse.json(
+        { message: '"queryOptions.categoryId" and "queryOptions.organizationId" must be provided' },
+        { status: 400 }
+      )
+    }
+
+    const category = await prisma.category.findFirst({
+      where: {
+        organizationId: parsedQueryOptions.organizationId,
+        id: parsedQueryOptions.categoryId
+      },
+      include: {
+        transactions: {
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
+        organization: {
+          select: {
+            currency: true,
+            categories: true
+          }
+        }
+      }
+    })
+
+    return NextResponse.json({
+      category: JSON.stringify(category, (_, value) => typeof value === 'bigint' ? value.toString() : value)
+    })
+  }
+  catch(e) {
+    console.error(e)
+
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    )
+  }  
+}
