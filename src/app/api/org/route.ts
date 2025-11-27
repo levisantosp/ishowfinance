@@ -151,3 +151,23 @@ export const PUT = async(req: NextRequest) => {
 
   return NextResponse.json({ id: org.id })
 }
+
+export const PATCH = async(req: NextRequest) => {
+  const data: {
+    id: string
+    name?: string
+    email?: string
+    currency?: $Enums.Currency
+  } = await req.json()
+
+  const org = await prisma.organization.update({
+    where: { id: data.id },
+    data: {
+      name: data.name,
+      email: data.email,
+      currency: data.currency
+    }
+  })
+
+  return NextResponse.json({ id: org.id })
+}
