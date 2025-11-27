@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "pnpm lint && next build --turbopack",
+    "compile": "bun lint && next build --turbopack",
     "start": "next start",
     "lint": "eslint",
-    "test": "node test.ts"
+    "test": "bun test.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",

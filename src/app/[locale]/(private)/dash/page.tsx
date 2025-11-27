@@ -12,24 +12,21 @@ type Props = {
   }>
 }
 
-export default async function Login(props: Props) {
+export default async function Dashboard(props: Props) {
   const t = await getTranslations()
 
   const session = await auth.api.getSession({ headers: await headers() })
 
   if(!session) {
-    authClient.signOut({
+    await authClient.signOut({
       fetchOptions: {
         headers: {
           auth: process.env.AUTH
-        },
-        onSuccess() {
-          redirect('/login')
         }
       }
     })
 
-    return null
+    redirect('/login')
   }
 
   const { locale } = await props.params

@@ -18,18 +18,15 @@ export default async function InviteHome(props: Props) {
   const session = await auth.api.getSession({ headers: await headers() })
 
   if(!session) {
-    authClient.signOut({
+    await authClient.signOut({
       fetchOptions: {
         headers: {
           auth: process.env.AUTH
-        },
-        onSuccess() {
-          redirect('/login')
         }
       }
     })
 
-    return null
+    redirect('/login')
   }
 
   const params = await props.params
