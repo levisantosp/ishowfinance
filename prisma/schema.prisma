@@ -61,8 +61,8 @@ model Transaction {
   categoryId  String
   type        TransactionType
   amount      BigInt
-  title       String          @db.VarChar(50)
-  description String?         @db.VarChar(100)
+  title       String
+  description String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
