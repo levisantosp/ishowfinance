@@ -16,16 +16,17 @@ export default function Menu() {
 
   const router = useRouter()
 
-  const signOut = () => authClient.signOut({
-    fetchOptions: {
-      headers: {
-        auth: process.env.NEXT_PUBLIC_AUTH
-      },
-      onSuccess() {
-        router.push('/login')
+  const signOut = async() => {
+    await authClient.signOut({
+      fetchOptions: {
+        headers: {
+          auth: process.env.NEXT_PUBLIC_AUTH
+        }
       }
-    }
-  })
+    })
+
+    router.push('/login')
+  }
 
   const t = useTranslations()
 

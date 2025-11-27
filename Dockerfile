@@ -1,18 +1,13 @@
-FROM node:24.11.1-alpine
-
-RUN corepack enable pnpm
+FROM oven/bun:1.3.3-alpine
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml /app/
-COPY prisma /app/prisma
-
-RUN pnpm i --frozen-lockfile
-
+COPY package.json bun.lock /app/
 COPY . .
 
-RUN pnpm prisma db push
-RUN pnpm prisma generate
-RUN pnpm build
+RUN bun i --frozen-lockfile
+RUN bun --env-file=.env prisma db push
+RUN bun --env-file=.env prisma generate
+RUN bun compile
 
-CMD ["pnpm", "start"]
+CMD ["bun", "start"]
