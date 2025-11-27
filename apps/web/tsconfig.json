@@ -34,7 +34,7 @@
         "./src/i18n/*"
       ],
       "@generated": [
-        "./prisma/generated/client.ts"
+        "../../prisma/generated/client.ts"
       ]
     },
     "forceConsistentCasingInFileNames": true,

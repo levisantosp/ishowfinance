@@ -10,9 +10,6 @@ const nextConfig: NextConfig = {
       }
     ]
   },
-  turbopack: {
-    root: __dirname
-  },
   allowedDevOrigins: ['test.ishowfinance.com']
 }
 const withNextIntl = createNextIntlPlugin()
