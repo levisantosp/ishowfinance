@@ -2,7 +2,7 @@ services:
   app:
     build: 
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./apps/web/Dockerfile
     image: ishowfinance
     container_name: ishowfinance
     restart: unless-stopped
