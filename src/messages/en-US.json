@@ -92,7 +92,7 @@
           "transaction_amount": "Amount (only numbers)",
           "transaction_date": "Transaction date time",
           "select_category": "Select category",
-          "success": "Transaction created successfully!",
+          "success": "Transaction created successfully",
           "type": {
             "REVENUE": "Revenue",
             "EXPENSE": "Expense"
@@ -100,6 +100,17 @@
         },
         "submit": "Create",
         "cancel": "Cancel"
+      },
+      "category": {
+        "transaction": {
+          "amount": "Amount: {amount}",
+          "submit": "Save",
+          "cancel": "Cancel",
+          "edited": "Transaction edited successfully",
+          "delete": "Delete",
+          "delete_transaction": "Delete Transaction",
+          "deleted": "Transaction deleted successfully"
+        }
       }
     },
     "invite": {

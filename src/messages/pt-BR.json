@@ -92,7 +92,7 @@
           "transaction_amount": "Quantia (apenas números)",
           "transaction_date": "Data e hora da transação",
           "select_category": "Selecione uma categoria",
-          "success": "Transação criada com sucesso!",
+          "success": "Transação criada com sucesso",
           "type": {
             "REVENUE": "Receita",
             "EXPENSE": "Despesa"
@@ -100,6 +100,17 @@
         },
         "submit": "Criar",
         "cancel": "Cancelar"
+      },
+      "category": {
+        "transaction": {
+          "amount": "Quantia: {amount}",
+          "submit": "Salvar",
+          "cancel": "Cancelar",
+          "edited": "Transação editada com sucesso",
+          "delete": "Deletar",
+          "delete_transaction": "Deletar Transação",
+          "deleted": "Transação deletada com sucesso"
+        }
       }
     },
     "invite": {
