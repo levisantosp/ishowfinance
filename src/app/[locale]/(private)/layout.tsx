@@ -7,6 +7,7 @@ import { getMessages, getTranslations } from 'next-intl/server'
 import { routing } from '@i18n/routing'
 import Header from '@components/private/Header'
 import Footer from '@components/global/Footer'
+import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -40,9 +41,10 @@ export default async function RootLayout({ children, params }: Props) {
           locale={locale}
         >
           <Header />
-          <main className='flex-grow'>
+          <main className='grow'>
             {children}
           </main>
+          <Toaster />
           <Footer />
         </NextIntlClientProvider>
       </body>

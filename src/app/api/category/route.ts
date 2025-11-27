@@ -1,128 +1,176 @@
-import { getSessionCookie } from 'better-auth/cookies'
 import { prisma } from '@/lib/prisma'
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/lib/auth'
+import { $Enums } from '@generated'
 
 export const POST = async(req: NextRequest) => {
-  const sessionCookie = getSessionCookie(req)
+  try {
+    const data: {
+      name: string
+      id: string
+    } = await req.json()
 
-  if(!sessionCookie) {
-    return NextResponse.json(
-      {
-        error: 'You must to be logged in'
-      },
-      {
-        status: 401
+    await prisma.category.create({
+      data: {
+        name: data.name,
+        organizationId: data.id
       }
+    })
+
+    return NextResponse.json({ ok: true })
+  }
+  catch(e) {
+    console.error(e)
+
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
     )
   }
-
-  const session = await auth.api.getSession({ headers: req.headers })
-
-  if(!session) {
-    return NextResponse.json(
-      {
-        error: 'You must to be logged in'
-      },
-      {
-        status: 401
-      }
-    )
-  }
-
-  const data: {
-    name: string
-    id: string
-  } = await req.json()
-
-  await prisma.category.create({
-    data: {
-      name: data.name,
-      organizationId: data.id
-    }
-  })
-  
-  return NextResponse.json({ ok: true })
 }
 
 export const PATCH = async(req: NextRequest) => {
-  const sessionCookie = getSessionCookie(req)
+  try {
+    const data: {
+      name: string
+      id: string
+    } = await req.json()
 
-  if(!sessionCookie) {
-    return NextResponse.json(
-      {
-        error: 'You must to be logged in'
+    await prisma.category.update({
+      where: {
+        id: data.id
       },
-      {
-        status: 401
+      data: {
+        name: data.name
       }
+    })
+
+    return NextResponse.json({ ok: true })
+  }
+  catch(e) {
+    console.error(e)
+
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
     )
   }
-
-  const session = await auth.api.getSession({ headers: req.headers })
-
-  if(!session) {
-    return NextResponse.json(
-      {
-        error: 'You must to be logged in'
-      },
-      {
-        status: 401
-      }
-    )
-  }
-
-  const data: {
-    name: string
-    id: string
-  } = await req.json()
-
-  await prisma.category.update({
-    where: {
-      id: data.id
-    },
-    data: {
-      name: data.name
-    }
-  })
-  
-  return NextResponse.json({ ok: true })
 }
 
 export const DELETE = async(req: NextRequest) => {
-  const sessionCookie = getSessionCookie(req)
+  try {
+    const data: { id: string } = await req.json()
 
-  if(!sessionCookie) {
-    return NextResponse.json(
-      {
-        error: 'You must to be logged in'
-      },
-      {
-        status: 401
+    await prisma.category.delete({
+      where: {
+        id: data.id
       }
+    })
+
+    return NextResponse.json({ ok: true })
+  }
+  catch(e) {
+    console.error(e)
+
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
     )
   }
+}
 
-  const session = await auth.api.getSession({ headers: req.headers })
+export const PUT = async(req: NextRequest) => {
+  try {
+    const data: {
+      title: string
+      description?: string
+      date?: string
+      amount: string
+      category: string
+      type: $Enums.TransactionType
+    } = await req.json()
 
-  if(!session) {
-    return NextResponse.json(
-      {
-        error: 'You must to be logged in'
+    await prisma.category.update({
+      where: {
+        id: data.category
       },
-      {
-        status: 401
+      data: {
+        transactions: {
+          create: {
+            title: data.title,
+            description: data.description,
+            createdAt: !data.date ? undefined : new Date(data.date),
+            amount: BigInt(data.amount),
+            type: data.type
+          }
+        }
       }
+    })
+
+    return NextResponse.json({ ok: true })
+  }
+  catch(e) {
+    console.error(e)
+
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
     )
   }
+}
 
-  const data: { id: string } = await req.json()
+export const GET = async(req: NextRequest) => {
+  try {
+    const queryOptions = req.headers.get('queryOptions')
 
-  await prisma.category.delete({
-    where: {
-      id: data.id
+    if(!queryOptions) {
+      return NextResponse.json(
+        { message: '"queryOptions" must be provided' },
+        { status: 400 }
+      )
     }
-  })
-  
-  return NextResponse.json({ ok: true })
+
+    const parsedQueryOptions: {
+      categoryId?: string
+      organizationId?: string
+    } = JSON.parse(queryOptions)
+
+    if(!parsedQueryOptions.categoryId || !parsedQueryOptions.organizationId) {
+      return NextResponse.json(
+        { message: '"queryOptions.categoryId" and "queryOptions.organizationId" must be provided' },
+        { status: 400 }
+      )
+    }
+
+    const category = await prisma.category.findFirst({
+      where: {
+        organizationId: parsedQueryOptions.organizationId,
+        id: parsedQueryOptions.categoryId
+      },
+      include: {
+        transactions: {
+          orderBy: {
+            createdAt: 'desc'
+          }
+        },
+        organization: {
+          select: {
+            currency: true,
+            categories: true
+          }
+        }
+      }
+    })
+
+    return NextResponse.json({
+      category: JSON.stringify(category, (_, value) => typeof value === 'bigint' ? value.toString() : value)
+    })
+  }
+  catch(e) {
+    console.error(e)
+
+    return NextResponse.json(
+      { message: 'Internal Server Error' },
+      { status: 500 }
+    )
+  }  
 }

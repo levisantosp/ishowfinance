@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output = "./generated"
+  output   = "./generated"
 }
 
 datasource db {
@@ -61,7 +61,8 @@ model Transaction {
   categoryId  String
   type        TransactionType
   amount      BigInt
-  description String?         @db.VarChar(100)
+  title       String
+  description String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
 
@@ -165,7 +166,7 @@ enum TokenType {
 }
 
 enum TransactionType {
-  INCOME
+  REVENUE
   EXPENSE
 }
 

@@ -12,7 +12,7 @@ type Props = {
 }
 
 export default async function Edit(props: Props) {
-  const { id } = await props.params
+  const { id, locale } = await props.params
 
   const session = await auth.api.getSession({ headers: await headers() })
 
@@ -29,7 +29,7 @@ export default async function Edit(props: Props) {
 
   return (
     <>
-      <EditOrg id={id} />
+      <EditOrg id={id} locale={locale} />
     </>
   )
 }

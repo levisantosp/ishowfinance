@@ -129,7 +129,7 @@ export default function Org({ userId, locale }: Props) {
                 <h3
                   className='font-medium'
                 >
-                  {t('pages.dash.profile.daily_income')}
+                  {t('pages.dash.profile.daily_revenue')}
                 </h3>
 
                 <span
@@ -137,9 +137,9 @@ export default function Org({ userId, locale }: Props) {
                 >
                   {(org.categories.reduce((sum, category) => {
                     const total = category.transactions
-                      .filter(t => t.type === 'INCOME')
+                      .filter(t => t.type === 'REVENUE')
                       .reduce((csum, transaction) =>
-                        csum + Number(transaction.amount), 0
+                        csum + Number(transaction.amount) / 100, 0
                       )
 
                     return sum + total
