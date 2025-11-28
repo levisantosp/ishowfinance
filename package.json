@@ -12,7 +12,9 @@
     "dev:api": "bun --filter '@ishowfinance/api' dev",
     "start:web": "bun --filter '@ishowfinance/web' start",
     "start:api": "bun --filter '@ishowfinance/api' start",
-    "start": "bun --filter './apps/*' start"
+    "start": "bun --filter './apps/*' start",
+    "push": "bun prisma db push",
+    "gen": "bun prisma generate"
   },
   "workspaces": [
     "apps/*"
