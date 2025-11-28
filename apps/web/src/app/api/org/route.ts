@@ -158,6 +158,7 @@ export const PATCH = async(req: NextRequest) => {
     name?: string
     email?: string
     currency?: $Enums.Currency
+    token?: string
   } = await req.json()
 
   const org = await prisma.organization.update({
@@ -165,7 +166,8 @@ export const PATCH = async(req: NextRequest) => {
     data: {
       name: data.name,
       email: data.email,
-      currency: data.currency
+      currency: data.currency,
+      token: data.token
     }
   })
 
