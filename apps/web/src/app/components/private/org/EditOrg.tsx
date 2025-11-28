@@ -235,6 +235,7 @@ export function EditOrg(props: Props) {
                                 className='font-bold text-blue-400 underline'
                                 href='https://api.ishowfinance.com/openapi'
                                 target='_blank'
+                                rel='noopener noreferrer'
                               >
                                 {chunks}
                               </a>
