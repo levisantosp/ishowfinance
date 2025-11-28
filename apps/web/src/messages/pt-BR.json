@@ -71,7 +71,7 @@
         "generate_token": "Gerar token de autorização",
         "copy_token": "Copiar token",
         "refresh_token": "Atualizar token",
-        "copied": "Token copied successfully",
+        "copied": "Token copiado com sucesso",
         "token_info": "Use este token para acessar nossa API.\nLeia a documentação <a>aqui</a>."
       },
       "categories": {
