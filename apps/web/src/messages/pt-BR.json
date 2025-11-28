@@ -59,13 +59,20 @@
         "members": "Membros",
         "edit": "Editar",
         "categories": "Categorias",
-        "create_transaction": "Criar uma transação"
+        "create_transaction": "Criar uma transação",
+        "delete": "Deletar organização"
       },
       "edit": {
         "title": "Editar {org}",
         "name": "Nome da organização",
         "email": "Email para contato",
-        "save": "Salvar alterações"
+        "save": "Salvar alterações",
+        "token_generated": "Token gerado com sucesso",
+        "generate_token": "Gerar token de autorização",
+        "copy_token": "Copiar token",
+        "refresh_token": "Atualizar token",
+        "copied": "Token copied successfully",
+        "token_info": "Use este token para acessar nossa API.\nLeia a documentação <a>aqui</a>."
       },
       "categories": {
         "no_category": "{org} ainda não possui nenhuma categoria",
@@ -111,7 +118,10 @@
           "delete_transaction": "Deletar Transação",
           "deleted": "Transação deletada com sucesso"
         }
-      }
+      },
+      "organization_name": "Digite \"{name}\" para confirmar",
+      "delete_organization": "Deletar Organização",
+      "delete": "Deletar"
     },
     "invite": {
       "unknown_invite": "Convite desconhecido",

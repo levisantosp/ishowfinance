@@ -59,13 +59,20 @@
         "members": "Members",
         "edit": "Edit",
         "categories": "Categories",
-        "create_transaction": "Create a transaction"
+        "create_transaction": "Create a transaction",
+        "delete": "Delete organization"
       },
       "edit": {
         "title": "Edit {org}",
         "name": "Organization name",
         "email": "Contact email",
-        "save": "Save changes"
+        "save": "Save changes",
+        "token_generated": "Token generated successfully",
+        "generate_token": "Generate authorization token",
+        "copy_token": "Copy token",
+        "refresh_token": "Refresh token",
+        "copied": "Token copied successfully",
+        "token_info": "Use this token to access our API.\nRead the documentation <a>here</a>."
       },
       "categories": {
         "no_category": "{org} does not have any category yet",
@@ -111,7 +118,10 @@
           "delete_transaction": "Delete Transaction",
           "deleted": "Transaction deleted successfully"
         }
-      }
+      },
+      "organization_name": "Type {name} to confirm",
+      "delete_organization": "Delete Organization",
+      "delete": "Delete"
     },
     "invite": {
       "unknown_invite": "Unknown invite",
