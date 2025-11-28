@@ -1,5 +1,5 @@
 services:
-  app:
+  web:
     build: 
       context: .
       dockerfile: ./apps/web/Dockerfile
@@ -8,3 +8,13 @@ services:
     restart: unless-stopped
     ports:
       - '7600:3000'
+
+  api:
+    build: 
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    image: ishowfinance
+    container_name: ishowfinance-api
+    restart: unless-stopped
+    ports:
+      - '7700:3001'

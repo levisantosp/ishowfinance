@@ -1,0 +1,38 @@
+name: deploy
+on:
+  push:
+    branches:
+      - 'main'
+    paths-ignore:
+      - '**.md'
+      - '.gitignore'
+      - 'README*'
+      - 'LICENSE'
+      - 'apps/web/*'
+jobs:
+  deploy:
+    name: 'Deploy to Production'
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/sabine
+          chmod 600 ~/.ssh/sabine
+          cat >>~/.ssh/config << END
+          Host prod
+            HostName $SSH_HOST
+            User $SSH_USERNAME
+            Port $SSH_PORT
+            IdentityFile ~/.ssh/sabine
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USERNAME: ${{ secrets.USERNAME }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.HOST }}
+          SSH_PORT: 22
+      - name: update ishowfinance
+        run: |
+          ssh prod 'cd ishowfinance && git pull && docker compose up -d --build api'

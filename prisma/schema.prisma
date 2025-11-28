@@ -29,7 +29,6 @@ model Organization {
   name       String
   email      String
   currency   Currency   @default(BRL)
-  tokens     Token[]
   user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId     String
   members    Member[]
@@ -37,6 +36,7 @@ model Organization {
   updatedAt  DateTime   @updatedAt
   invites    Invite[]
   categories Category[]
+  token      String?    @unique
 
   @@index([userId])
   @@map("organization")
@@ -68,16 +68,6 @@ model Transaction {
 
   @@index([categoryId, type])
   @@map("transaction")
-}
-
-model Token {
-  id             String       @id @default(uuid())
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  type           TokenType
-
-  @@unique([organizationId, type])
-  @@map("token")
 }
 
 model Invite {
@@ -158,11 +148,6 @@ model Verification {
 enum Role {
   OWNER
   ADMIN
-}
-
-enum TokenType {
-  TEST
-  PROD
 }
 
 enum TransactionType {
