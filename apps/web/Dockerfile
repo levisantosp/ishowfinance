@@ -5,12 +5,12 @@ WORKDIR /app
 COPY package.json bun.lock ./
 COPY apps/web/package.json ./apps/web/package.json
 
-RUN bun i --frozen-lockfile
+RUN bun i
 
 COPY . .
 
-RUN bun --env-file=.env prisma db push
-RUN bun --env-file=.env prisma generate
+RUN bun push
+RUN bun gen
 
 WORKDIR /app/apps/web
 
