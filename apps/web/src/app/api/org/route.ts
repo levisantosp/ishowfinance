@@ -171,3 +171,15 @@ export const PATCH = async(req: NextRequest) => {
 
   return NextResponse.json({ id: org.id })
 }
+
+export const DELETE = async(req: NextRequest) => {
+  const data: { id: string } = await req.json()
+
+  await prisma.organization.delete({
+    where: {
+      id: data.id
+    }
+  })
+
+  return NextResponse.json({ ok: true })
+}
