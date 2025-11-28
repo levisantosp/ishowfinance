@@ -4,8 +4,11 @@ import { Prisma } from '@generated'
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
 import Loading from '../../global/Loading.tsx'
-import { notFound} from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { useRouter } from '@i18n/navigation'
+import { Copy, KeySquare, RefreshCw } from 'lucide-react'
+import { randomBytes } from 'node:crypto'
+import { toast } from 'sonner'
 
 type Org = Prisma.OrganizationGetPayload<{}>
 
@@ -27,27 +30,27 @@ export function EditOrg(props: Props) {
   const [email, setEmail] = useState('')
   const [currency, setCurrency] = useState('')
 
-  useEffect(() => {
-    const findOrg = async() => {
-      const { organization }: {
-        organization: Org | null
-      } = await (await fetch('/api/org', {
-        headers: {
-          auth: process.env.NEXT_PUBLIC_AUTH,
-          find: 'unique',
-          queryOptions: JSON.stringify({
-            where: { id: props.id }
-          })
-        }
-      })).json()
-      
-      setOrg(organization)
-
-      if(organization) {
-        setCurrency(organization.currency)
+  const findOrg = async() => {
+    const { organization }: {
+      organization: Org | null
+    } = await (await fetch('/api/org', {
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH,
+        find: 'unique',
+        queryOptions: JSON.stringify({
+          where: { id: props.id }
+        })
       }
-    }
+    })).json()
 
+    setOrg(organization)
+
+    if(organization) {
+      setCurrency(organization.currency)
+    }
+  }
+
+  useEffect(() => {
     findOrg()
   }, [])
 
@@ -91,6 +94,42 @@ export function EditOrg(props: Props) {
       && currency === org?.currency
     )
 
+  const handleGenerateAuthToken = async() => {
+    if(!org) {
+      return toast.error(t('utils.error'))
+    }
+
+    const token = randomBytes(32).toString('hex')
+
+    const res = await fetch('/api/org', {
+      method: 'PATCH',
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH
+      },
+      body: JSON.stringify({ token, id: org.id })
+    })
+
+    if(!res.ok) {
+      return toast.error(t('utils.error'), {
+        description: res.statusText
+      })
+    }
+
+    toast.success(t('pages.org.edit.token_generated'))
+
+    findOrg()
+  }
+
+  const handleCopyAuthToken = async() => {
+    if(!org || !org.token) {
+      return toast.error(t('utils.error'))
+    }
+
+    await navigator.clipboard.writeText(org.token)
+
+    toast.success(t('pages.org.edit.copied'))
+  }
+
   return (
     <>
       {org === undefined && (
@@ -120,71 +159,162 @@ export function EditOrg(props: Props) {
           </div>
 
           <div
-            className='flex justify-center'
+            className='flex flex-col gap-10'
           >
-            <form
-              className='flex flex-col gap-5 relative max-w-md md:w-full'
-              onSubmit={handleEdit}
+            <div
+              className='flex justify-center'
             >
-              <input
-                type='text'
-                placeholder={t('pages.org.edit.name')}
-                className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
-                name='name'
-                value={name}
-                onChange={(input) => setName(input.target.value)}
-                autoComplete='off'
-              />
-
-              <input
-                type='email'
-                placeholder={t('pages.org.edit.email')}
-                className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
-                name='email'
-                value={email}
-                onChange={(input) => setEmail(input.target.value)}
-              />
-
-              <select
-                name='currency'
-                value={currency}
-                onChange={(input) => setCurrency(input.target.value)}
-                className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+              <div
+                className='flex flex-col gap-2'
               >
                 {
-                  currencies.map((c) => (
-                    <option
-                      key={c}
-                      value={c}
-                      className='rounded-2xl bg-[#171717]'
-                    >
-                      {t(`pages.org.create.currency.${c}`)}
-                    </option>
-                  ))
-                }
-              </select>
+                  !org.token
+                    ? (
+                      <>
+                        <div
+                          onClick={handleGenerateAuthToken}
+                          className='
+                            flex gap-1
+                            bg-indigo-600 p-2 rounded-xl transition hover:bg-indigo-500 duration-300 cursor-pointer
+                            items-center
+                          '
+                        >
+                          <KeySquare className='hidden md:block' />
+                          <KeySquare className='block md:hidden' size={20} />
 
-              <button
-                type='submit'
-                className='
+                          <span>
+                            {t('pages.org.edit.generate_token')}
+                          </span>
+                        </div>
+                      </>
+                    )
+                    : (
+                      <>
+                        <div
+                          onClick={handleGenerateAuthToken}
+                          className='
+                            flex gap-1
+                            bg-indigo-600 p-2 rounded-xl transition hover:bg-indigo-500 duration-300 cursor-pointer
+                            items-center
+                          '
+                        >
+                          <RefreshCw className='hidden md:block' />
+                          <RefreshCw className='block md:hidden' size={20} />
+
+                          <span>
+                            {t('pages.org.edit.refresh_token')}
+                          </span>
+                        </div>
+
+                        <div
+                          onClick={handleCopyAuthToken}
+                          className='
+                            flex gap-1
+                            bg-indigo-600 p-2 rounded-xl transition hover:bg-indigo-500 duration-300 cursor-pointer
+                            items-center
+                          '
+                        >
+                          <Copy className='hidden md:block' />
+                          <Copy className='block md:hidden' size={20} />
+
+                          <span>
+                            {t('pages.org.edit.copy_token')}
+                          </span>
+                        </div>
+
+                        <span
+                          style={
+                            {
+                              whiteSpace: 'pre-line'
+                            }
+                          }
+                        >
+                          {t.rich('pages.org.edit.token_info', {
+                            a: (chunks) => (
+                              <a
+                                className='font-bold text-blue-400 underline'
+                                href='https://api.ishowfinance.com/openapi'
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                {chunks}
+                              </a>
+                            )
+                          })}
+                        </span>
+                      </>
+                    )
+                }
+              </div>
+            </div>
+
+            <div
+              className='flex justify-center'
+            >
+              <form
+                className='flex flex-col gap-5 relative max-w-md md:w-full'
+                onSubmit={handleEdit}
+              >
+                <input
+                  type='text'
+                  placeholder={t('pages.org.edit.name')}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                  name='name'
+                  value={name}
+                  onChange={(input) => setName(input.target.value)}
+                  autoComplete='off'
+                />
+
+                <input
+                  type='email'
+                  placeholder={t('pages.org.edit.email')}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                  name='email'
+                  value={email}
+                  onChange={(input) => setEmail(input.target.value)}
+                />
+
+                <select
+                  name='currency'
+                  value={currency}
+                  onChange={(input) => setCurrency(input.target.value)}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                >
+                  {
+                    currencies.map((c) => (
+                      <option
+                        key={c}
+                        value={c}
+                        className='rounded-2xl bg-[#171717]'
+                      >
+                        {t(`pages.org.create.currency.${c}`)}
+                      </option>
+                    ))
+                  }
+                </select>
+
+                <button
+                  type='submit'
+                  className='
                 flex w-full rounded-2xl bg-green-700 py-2
                 justify-center items-center text-center mt-5
                 transition duration-300 hover:bg-green-600
                 disabled:bg-green-900 disabled:cursor-not-allowed disabled:text-gray-300
                 cursor-pointer
                 '
-                disabled={isDisabled}
-              >
-                {isLoading ? (
-                  <Loading width={5} height={5} />
-                ) : (
-                  <>
-                    {t('pages.org.edit.save')}
-                  </>
-                )
-                }
-              </button>
-            </form>
+                  disabled={isDisabled}
+                >
+                  {isLoading ? (
+                    <Loading width={5} height={5} />
+                  ) : (
+                    <>
+                      {t('pages.org.edit.save')}
+                    </>
+                  )
+                  }
+                </button>
+              </form>
+            </div>
           </div>
         </>
       )}

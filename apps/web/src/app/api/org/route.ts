@@ -158,6 +158,7 @@ export const PATCH = async(req: NextRequest) => {
     name?: string
     email?: string
     currency?: $Enums.Currency
+    token?: string
   } = await req.json()
 
   const org = await prisma.organization.update({
@@ -165,9 +166,22 @@ export const PATCH = async(req: NextRequest) => {
     data: {
       name: data.name,
       email: data.email,
-      currency: data.currency
+      currency: data.currency,
+      token: data.token
     }
   })
 
   return NextResponse.json({ id: org.id })
+}
+
+export const DELETE = async(req: NextRequest) => {
+  const data: { id: string } = await req.json()
+
+  await prisma.organization.delete({
+    where: {
+      id: data.id
+    }
+  })
+
+  return NextResponse.json({ ok: true })
 }

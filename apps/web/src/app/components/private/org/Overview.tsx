@@ -14,6 +14,7 @@ import {
   PieChart, Pie, Cell, Legend
 } from 'recharts'
 import { toast } from 'sonner'
+import { useRouter } from '@i18n/navigation'
 
 type Org = Prisma.OrganizationGetPayload<{
   include: {
@@ -44,6 +45,10 @@ export default function Overview({ id, locale, isAdmin }: Props) {
   const [transactionCategory, setTransactionCategory] = useState<string>()
   const [transactionType, setTransactionType] = useState<string>(transactionTypes[0])
   const [isLoading, setIsLoading] = useState(false)
+  const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false)
+  const [organizationName, setOrganizationName] = useState<string>()
+
+  const router = useRouter()
 
   const isDisabled = (!transactionTitle || !transactionTitle.length)
     || (
@@ -53,6 +58,10 @@ export default function Overview({ id, locale, isAdmin }: Props) {
     )
     || isLoading
     || !transactionCategory
+  
+  const isDeleteButtonDisabled = org
+    && org.name !== organizationName
+    || isLoading
 
   useEffect(() => {
     const findOrg = async() => {
@@ -78,7 +87,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
       })).json()
 
       setOrg(organization)
-      setTransactionCategory(organization?.categories[0].id)
+      setTransactionCategory(organization?.categories[0]?.id)
     }
 
     findOrg()
@@ -90,9 +99,7 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
   const t = useTranslations()
 
-  const handleTransactionClick = async() => {
-    setIsTransactionMenuOpen(true)
-  }
+  const handleTransactionClick = async() => setIsTransactionMenuOpen(true)
 
   const handleTransactionSubmit = async() => {
     setIsLoading(true)
@@ -139,6 +146,32 @@ export default function Overview({ id, locale, isAdmin }: Props) {
     setTransactionAmount(undefined)
     setTransactionDate(undefined)
     setIsLoading(false)
+  }
+
+  const handleDeleteClick = () => setIsDeleteMenuOpen(true)
+  const handleDeleteCancel = () => setIsDeleteMenuOpen(false)
+  const handleDeleteSubmit = async() => {
+    setIsLoading(true)
+    
+    if(!org) {
+      return toast.error(t('utils.error'))
+    }
+
+    const res = await fetch('/api/org', {
+      method: 'DELETE',
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH
+      },
+      body: JSON.stringify({ id: org.id })
+    })
+
+    if(!res.ok) {
+      return toast.error(t('utils.error'), {
+        description: res.statusText
+      })
+    }
+
+    router.push('/dash')
   }
 
   const formatCurrency = (value: string | undefined) => {
@@ -259,6 +292,84 @@ export default function Overview({ id, locale, isAdmin }: Props) {
             className='flex items-center rounded-2xl p-5 gap-2'
           >
             <Loading height={10} width={10} />
+          </div>
+        </div>
+      )}
+
+      {isDeleteMenuOpen && (
+        <div
+          className='fixed inset-0 z-40 bg-black/60 flex items-center justify-center'
+        >
+          <div
+            className='
+              flex flex-col items-center
+              rounded-2xl border border-gray-500
+              bg-[#171717]
+            '
+          >
+            <div
+              className='flex flex-col justify-center items-center gap-5 py-10 px-20'
+            >
+              <h3
+                style={
+                  {
+                    whiteSpace: 'pre-line'
+                  }
+                }
+                className='text-center text-xl md:text-2xl font-bold'
+              >
+                {t('pages.org.delete_organization')}
+              </h3>
+
+              <form
+                className='flex flex-col gap-5 relative max-w-md md:w-full'
+                onSubmit={handleTransactionSubmit}
+              >
+                <textarea
+                  placeholder={t('pages.org.organization_name', { name: org!.name })}
+                  className='w-full rounded-2xl border border-gray-500 pl-4 py-2'
+                  name='org.name'
+                  value={organizationName}
+                  onChange={(input) => setOrganizationName(input.target.value)}
+                  autoComplete='off'
+                />
+              </form>
+
+              <button
+                type='submit'
+                className='
+                  flex w-full rounded-2xl bg-green-700 py-2
+                  justify-center items-center text-center mt-5
+                  transition duration-300 hover:bg-green-600
+                disabled:bg-green-900 disabled:cursor-not-allowed disabled:text-gray-300
+                  cursor-pointer
+                '
+                onClick={handleDeleteCancel}
+              >
+                {t('pages.org.transaction.cancel')}
+              </button>
+
+              <button
+                type='button'
+                className='
+                  flex w-full rounded-2xl bg-red-500 py-2
+                  justify-center items-center text-center mt-5
+                  transition duration-300 hover:bg-red-400
+                  disabled:bg-red-900 disabled:cursor-not-allowed
+                  cursor-pointer
+                '
+                onClick={handleDeleteSubmit}
+                disabled={isDeleteButtonDisabled}
+              >
+                {
+                  isLoading
+                    ? (
+                      <Loading width={5} height={5} />
+                    )
+                    : t('pages.org.delete')
+                }
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -526,6 +637,25 @@ export default function Overview({ id, locale, isAdmin }: Props) {
 
                         <span>
                           {t('pages.org.menu.create_transaction')}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div
+                      className='
+                      cursor-pointer
+                      transition duration-300 hover:bg-[#444444]
+                      rounded-2xl px-4 py-2
+                      '
+                      onClick={handleDeleteClick}
+                    >
+                      <div
+                        className='flex gap-2'
+                      >
+                        <Lucide.Trash className='text-red-400'/>
+
+                        <span>
+                          {t('pages.org.menu.delete')}
                         </span>
                       </div>
                     </div>
