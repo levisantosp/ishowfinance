@@ -60,7 +60,8 @@
         "edit": "Editar",
         "categories": "Categorias",
         "create_transaction": "Criar uma transação",
-        "delete": "Deletar organização"
+        "delete": "Deletar organização",
+        "transactions": "Transações"
       },
       "edit": {
         "title": "Editar {org}",
@@ -121,7 +122,11 @@
       },
       "organization_name": "Digite \"{name}\" para confirmar",
       "delete_organization": "Deletar Organização",
-      "delete": "Deletar"
+      "delete": "Deletar",
+      "transactions": {
+        "title": "Transações",
+        "no_transaction": "{org} ainda não possui nenhuma transação"
+      }
     },
     "invite": {
       "unknown_invite": "Convite desconhecido",
