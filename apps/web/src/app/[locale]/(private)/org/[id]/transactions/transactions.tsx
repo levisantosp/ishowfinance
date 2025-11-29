@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useEffect, useState } from 'react'
-import { $Enums, Prisma, type Transaction } from '@generated'
+import { Prisma, type Transaction } from '@generated'
 import { notFound } from 'next/navigation'
 import { useRouter } from '@i18n/navigation'
 import { Pencil, Trash, Undo2 } from 'lucide-react'
@@ -89,7 +89,6 @@ export default function TransactionsComponent(props: Props) {
   const router = useRouter()
 
   const [isEditMenuOpen, setIsEditMenuOpen] = useState(false)
-  const [isButtonLoading, setIsButtonLoading] = useState(false)
   const [isDeleteMenuOpen, setIsDeleteMenuOpen] = useState(false)
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -500,74 +499,74 @@ export default function TransactionsComponent(props: Props) {
         <div
           className='flex flex-col items-center gap-10'
         >
-        {transactions.map(transaction => (
-          <div
-            className='w-full max-w-xl md:max-w-2xl'
-            key={transaction.id}
-          >
+          {transactions.map(transaction => (
             <div
-              className='
+              className='w-full max-w-xl md:max-w-2xl'
+              key={transaction.id}
+            >
+              <div
+                className='
                 flex justify-between items-start
                 border border-gray-500 rounded-2xl w-full max-w-4xl p-4 md:p-6
               '
-            >
-              <div
-                className='flex flex-col gap-4 justify-center w-full'
               >
-                <div>
-                  <h3
-                    className='font-semibold text-lg md:text-2xl'
-                  >
-                    {transaction.title}
-                  </h3>
+                <div
+                  className='flex flex-col gap-4 justify-center w-full'
+                >
+                  <div>
+                    <h3
+                      className='font-semibold text-lg md:text-2xl'
+                    >
+                      {transaction.title}
+                    </h3>
 
-                  {
-                    transaction.description
-                      ? (
-                        <span
-                          className='text-gray-400 text-xs md:text-lg'
-                          style={
-                            {
-                              whiteSpace: 'pre-line'
+                    {
+                      transaction.description
+                        ? (
+                          <span
+                            className='text-gray-400 text-xs md:text-lg'
+                            style={
+                              {
+                                whiteSpace: 'pre-line'
+                              }
                             }
-                          }
-                        >
-                          {transaction.description}
-                        </span>
-                      )
-                      : null
-                  }
+                          >
+                            {transaction.description}
+                          </span>
+                        )
+                        : null
+                    }
+                  </div>
+
+                  <span
+                    className='text-gray-400 font-semibold text-xs md:text-lg'
+                  >
+                    {t.rich('pages.org.category.transaction.amount', {
+                      amount: (Number(transaction.amount) / 100).toLocaleString(props.locale, {
+                        style: 'currency',
+                        currency: org?.currency
+                      })
+                    })}
+                  </span>
                 </div>
 
-                <span
-                  className='text-gray-400 font-semibold text-xs md:text-lg'
+                <div
+                  className='flex gap-2 items-center shrink-0 ml-4'
                 >
-                  {t.rich('pages.org.category.transaction.amount', {
-                    amount: (Number(transaction.amount) / 100).toLocaleString(props.locale, {
-                      style: 'currency',
-                      currency: org?.currency
-                    })
-                  })}
-                </span>
-              </div>
+                  <Pencil
+                    size={15}
+                    className='cursor-pointer'
+                    onClick={() => handlePencilClick(transaction.id)}
+                  />
 
-              <div
-                className='flex gap-2 items-center shrink-0 ml-4'
-              >
-                <Pencil
-                  size={15}
-                  className='cursor-pointer'
-                  onClick={() => handlePencilClick(transaction.id)}
-                />
-
-                <Trash
-                  size={15}
-                  className='text-red-400 cursor-pointer'
-                  onClick={() => handleTrashClick(transaction.id)}
-                />
+                  <Trash
+                    size={15}
+                    className='text-red-400 cursor-pointer'
+                    onClick={() => handleTrashClick(transaction.id)}
+                  />
+                </div>
               </div>
             </div>
-          </div>
           ))}
         </div>
       )}
