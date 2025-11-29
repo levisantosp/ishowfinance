@@ -60,7 +60,8 @@
         "edit": "Edit",
         "categories": "Categories",
         "create_transaction": "Create a transaction",
-        "delete": "Delete organization"
+        "delete": "Delete organization",
+        "transactions": "Transactions"
       },
       "edit": {
         "title": "Edit {org}",
@@ -121,7 +122,11 @@
       },
       "organization_name": "Type {name} to confirm",
       "delete_organization": "Delete Organization",
-      "delete": "Delete"
+      "delete": "Delete",
+      "transactions": {
+        "title": "Transactions",
+        "no_transaction": "{org} does not have any transactions yet"
+      }
     },
     "invite": {
       "unknown_invite": "Unknown invite",
