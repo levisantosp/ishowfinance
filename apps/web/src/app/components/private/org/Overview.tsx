@@ -30,11 +30,12 @@ type Props = {
   id: string
   locale: string
   isAdmin: boolean
+  isOwner: boolean
 }
 
 const transactionTypes = ['REVENUE', 'EXPENSE'] as const
 
-export default function Overview({ id, locale, isAdmin }: Props) {
+export default function Overview({ id, locale, isAdmin, isOwner }: Props) {
   const [org, setOrg] = useState<Org | null>()
   const [isOpen, setIsOpen] = useState(false)
   const [isTransactionMenuOpen, setIsTransactionMenuOpen] = useState(false)
@@ -647,18 +648,41 @@ export default function Overview({ id, locale, isAdmin }: Props) {
                       transition duration-300 hover:bg-[#444444]
                       rounded-2xl px-4 py-2
                       '
-                      onClick={handleDeleteClick}
                     >
-                      <div
+                      <Link
                         className='flex gap-2'
+                        href={`/${locale}/org/${id}/transactions`}
                       >
-                        <Lucide.Trash className='text-red-400'/>
+                        <Lucide.PiggyBank color='#99a1af' />
 
                         <span>
-                          {t('pages.org.menu.delete')}
+                          {t('pages.org.menu.transactions')}
                         </span>
-                      </div>
+                      </Link>
                     </div>
+
+                    {
+                      isOwner && (
+                        <div
+                          className='
+                            cursor-pointer
+                            transition duration-300 hover:bg-[#444444]
+                            rounded-2xl px-4 py-2
+                          '
+                          onClick={handleDeleteClick}
+                        >
+                          <div
+                            className='flex gap-2'
+                          >
+                            <Lucide.Trash className='text-red-400' />
+
+                            <span>
+                              {t('pages.org.menu.delete')}
+                            </span>
+                          </div>
+                        </div>
+                      )
+                    }
                   </div>
                 </Transition>
               </div>
