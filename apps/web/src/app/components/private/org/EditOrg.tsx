@@ -95,7 +95,11 @@ export function EditOrg(props: Props) {
     )
 
   const handleGenerateAuthToken = async() => {
+    setIsLoading(true)
+
     if(!org) {
+      setIsLoading(false)
+      
       return toast.error(t('utils.error'))
     }
 
@@ -117,6 +121,7 @@ export function EditOrg(props: Props) {
 
     toast.success(t('pages.org.edit.token_generated'))
 
+    setIsLoading(false)
     findOrg()
   }
 
@@ -176,37 +181,60 @@ export function EditOrg(props: Props) {
                           className='
                             flex gap-1
                             bg-indigo-600 p-2 rounded-xl transition hover:bg-indigo-500 duration-300 cursor-pointer
+                            disabled:bg-indigo-900 disabled:cursor-not-allowed disabled:justify-center
                             items-center
                           '
                         >
-                          <KeySquare className='hidden md:block' />
-                          <KeySquare className='block md:hidden' size={20} />
+                          {
+                            isLoading
+                              ? (
+                                <Loading width={5} height={5} />
+                              )
+                              : (
+                                <>
+                                  <KeySquare className='hidden md:block' />
+                                  <KeySquare className='block md:hidden' size={20} />
 
-                          <span>
-                            {t('pages.org.edit.generate_token')}
-                          </span>
+                                  <span>
+                                    {t('pages.org.edit.generate_token')}
+                                  </span>
+                                </>
+                              )
+                          }
                         </div>
                       </>
                     )
                     : (
                       <>
-                        <div
+                        <button
                           onClick={handleGenerateAuthToken}
                           className='
                             flex gap-1
                             bg-indigo-600 p-2 rounded-xl transition hover:bg-indigo-500 duration-300 cursor-pointer
+                            disabled:bg-indigo-900 disabled:cursor-not-allowed disabled:justify-center
                             items-center
                           '
+                          disabled={isLoading}
                         >
-                          <RefreshCw className='hidden md:block' />
-                          <RefreshCw className='block md:hidden' size={20} />
+                          {
+                            isLoading
+                              ? (
+                                <Loading width={5} height={5} />
+                              )
+                              : (
+                                <>
+                                  <RefreshCw className='hidden md:block' />
+                                  <RefreshCw className='block md:hidden' size={20} />
 
-                          <span>
-                            {t('pages.org.edit.refresh_token')}
-                          </span>
-                        </div>
+                                  <span>
+                                    {t('pages.org.edit.refresh_token')}
+                                  </span>
+                                </>
+                              )
+                          }
+                        </button>
 
-                        <div
+                        <button
                           onClick={handleCopyAuthToken}
                           className='
                             flex gap-1
@@ -220,7 +248,7 @@ export function EditOrg(props: Props) {
                           <span>
                             {t('pages.org.edit.copy_token')}
                           </span>
-                        </div>
+                        </button>
 
                         <span
                           style={

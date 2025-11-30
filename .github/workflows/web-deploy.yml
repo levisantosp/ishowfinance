@@ -8,7 +8,7 @@ on:
       - '.gitignore'
       - 'README*'
       - 'LICENSE'
-      - 'apps/api/*'
+      - 'apps/api/**'
 jobs:
   deploy:
     name: 'Deploy to Production'
