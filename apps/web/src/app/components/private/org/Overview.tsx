@@ -64,33 +64,32 @@ export default function Overview({ id, locale, isAdmin, isOwner }: Props) {
     && org.name !== organizationName
     || isLoading
 
-  useEffect(() => {
-    const findOrg = async() => {
-      const { organization }: {
-        organization: Omit<Org, 'balance'> & {
-          balance: string
-        } | null
-      } = await (await fetch('/api/org', {
-        headers: {
-          auth: process.env.NEXT_PUBLIC_AUTH!,
-          find: 'unique',
-          queryOptions: JSON.stringify({
-            where: { id },
-            include: {
-              categories: {
-                include: {
-                  transactions: true
-                }
+  const findOrg = async() => {
+    const { organization }: {
+      organization: Omit<Org, 'balance'> & {
+        balance: string
+      } | null
+    } = await (await fetch('/api/org', {
+      headers: {
+        auth: process.env.NEXT_PUBLIC_AUTH!,
+        find: 'unique',
+        queryOptions: JSON.stringify({
+          where: { id },
+          include: {
+            categories: {
+              include: {
+                transactions: true
               }
             }
-          })
-        }
-      })).json()
+          }
+        })
+      }
+    })).json()
 
-      setOrg(organization)
-      setTransactionCategory(organization?.categories[0]?.id)
-    }
-
+    setOrg(organization)
+    setTransactionCategory(organization?.categories[0]?.id)
+  }
+  useEffect(() => {
     findOrg()
   }, [id])
 
@@ -138,6 +137,8 @@ export default function Overview({ id, locale, isAdmin, isOwner }: Props) {
     setIsLoading(false)
 
     toast.success(t('pages.org.transaction.create.success'))
+
+    findOrg()
   }
 
   const handleTransactionCancel = async() => {
