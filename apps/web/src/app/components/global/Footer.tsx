@@ -5,15 +5,15 @@ export default function Footer() {
   return (
     <>
       <footer
-        className='bg-[#0F0F0F] md:px-30 h-40 md:h-50 flex flex-col gap-13 md:gap-0 md:flex-row md:justify-between px-4 p-1 md:items-center mt-30'
+        className='bg-[#0F0F0F] md:px-30 h-25 md:h-20 flex flex-col md:flex-row md:justify-between px-4 p-1 md:items-center mt-30'
       >
         <div
-          className='flex px-4 p-1 md:px-0 items-center text-xl md:text-3xl font-extrabold'
+          className='flex px-4 p-1 md:px-0 justify-center items-center text-base md:text-xl font-extrabold'
         >
           <Image
             src='/header/logo.png'
-            width={70}
-            height={70}
+            width={50}
+            height={50}
             alt='logo'
           />
 
@@ -36,7 +36,7 @@ export default function Footer() {
           <span
             className='md:text-sm text-xs text-center'
           >
-            IShowFinance 2025 - All rights reserved.
+            ishowfinance 2025 - All rights reserved.
           </span>
         </div>
       </footer>

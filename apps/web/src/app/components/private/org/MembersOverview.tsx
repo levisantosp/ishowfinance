@@ -251,7 +251,7 @@ export default function MembersOverview(props: Props) {
               {org.members.map(member => (
                 <div
                   key={member.user.id}
-                  className='border border-gray-500 rounded-2xl'
+                  className='border border-gray-500 rounded-2xl w-full max-w-md'
                 >
                   <div
                     className='px-5 py-2'
